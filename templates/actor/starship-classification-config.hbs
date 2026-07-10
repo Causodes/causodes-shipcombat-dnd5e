@@ -1,0 +1,24 @@
+<section class="flexcol">
+    <div class="final-value">{{ preview }}</div>
+    <fieldset class="card">
+        <ol class="unlist form-grid form-grid-50 types-list" style="--type-rows: {{ rows }}">
+            {{#each options}}
+            <li class="type-row">
+                <label>
+                    <span>{{ label }}</span>
+                    <input type="radio" name="classification" value="{{ value }}"
+                           {{#if (eq label ../currentLabel)}} checked{{/if}}>
+                </label>
+            </li>
+            {{/each}}
+            <li class="type-row custom">
+                <label>
+                    <input type="text" name="customClassification" value="{{ customLabel }}"
+                           placeholder="{{ localize 'DND5E.CreatureTypeSelectorCustom' }}">
+                    <input type="radio" name="classification" value="custom"
+                           {{#if isCustom}} checked{{/if}}>
+                </label>
+            </li>
+        </ol>
+    </fieldset>
+</section>

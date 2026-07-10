@@ -1,0 +1,8 @@
+/* causodes-shipcombat-dnd5e — gunner.css */
+
+/* ── Docked status bar — matches sensors bar (all tabs unified) ───────────── */
+.causodes-shipcombat-dnd5e [data-tab="gunner"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="gunner4man"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="gunner5man"] .shipcombat-role-status-bar {
+  background: var(--dnd5e-color-dark-gray);
+}

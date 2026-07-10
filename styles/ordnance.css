@@ -1,0 +1,46 @@
+/* causodes-shipcombat-dnd5e — ordnance.css */
+
+/* ── Docked status bar — matches sensors bar (all tabs unified) ───────────── */
+.causodes-shipcombat-dnd5e [data-tab="ordnance"] .shipcombat-role-status-bar {
+  background: var(--dnd5e-color-dark-gray);
+}
+
+/* ── Warhead Traits config grid — "Shd Bypass" checkbox centering ─────────
+   Core's torpedo.css centers this checkbox via `margin: 4px auto 0;
+   display: block;`, which isn't reliably centering a replaced element like
+   <input type="checkbox"> in practice. Rather than fight the checkbox's own
+   box model, make its actual grid CELL (.shipcombat-torpedo-trait — the
+   checkbox itself is a grandchild, not the grid item, so `justify-self` on
+   the checkbox directly has no effect) a centered flex column instead. Only
+   targets the cell containing a checkbox, so the other (number-input) trait
+   cells are untouched. */
+.causodes-shipcombat-dnd5e.shipcombat-ordnance .shipcombat-torpedo-trait:has(input[type="checkbox"]) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Header resource-bar labels — align with the document-name title ──────
+   Core's torpedo.css right-aligns each bar's label within a fixed 100px
+   column, so "Warheads"/"Fuel"/"Ammo" visually sit indented from the
+   flush-left document-name title above them. Left-align just for our
+   header, where the bars sit directly under the name field. */
+.causodes-shipcombat-dnd5e.shipcombat-ordnance .sheet-header .shipcombat-torpedo-bar > label {
+  text-align: left;
+}
+
+/* ── Portrait gold ring ─────────────────────────────────────────────────
+   dnd5e's native rule for this (.dnd5e2.sheet.actor.npc .sheet-header
+   .portrait > img { border: 6px solid var(--dnd5e-color-gold); }) isn't
+   taking effect in this hosting environment for reasons that couldn't be
+   pinned down (its own stylesheet isn't visible via document.styleSheets/
+   adoptedStyleSheets at all here, which normal browser DevTools should
+   show — likely specific to how this instance is being inspected/served).
+   Define it ourselves so the visual result doesn't depend on that rule
+   actually applying. Fallback colors included in case the --dnd5e-color-*
+   custom properties are part of the same resolution problem. */
+.causodes-shipcombat-dnd5e.shipcombat-ordnance .sheet-header .portrait > img {
+  border-radius: 100%;
+  border: 6px solid var(--dnd5e-color-gold, #9f9275);
+  box-shadow: 0 0 6px var(--dnd5e-color-black, #000);
+}

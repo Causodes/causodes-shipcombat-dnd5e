@@ -1,0 +1,76 @@
+{
+  "TYPES": {
+    "Actor": {
+      "causodes-shipcombat-dnd5e.ship": "Starship",
+      "causodes-shipcombat-dnd5e.npcShip": "NPC Starship",
+      "causodes-shipcombat-dnd5e.shipOrdnance": "Ship Ordnance",
+      "causodes-shipcombat-dnd5e.starship": "Starship (Legacy)"
+    },
+    "Item": {
+      "causodes-shipcombat-dnd5e.component": "Ship Component"
+    }
+  },
+  "SHIPCOMBAT": {
+    "Label": {
+      "Classification": "Classification"
+    },
+    "Component": {
+      "ShieldStrengthPerCore": "Shield Flux per Core",
+      "HitModifier": "Hit Modifier"
+    },
+    "Tooltip": {
+      "OverclockDC": "Overclock the reactor: DC {dc} {skill} check, +1 Heat"
+    },
+    "Sensors": {
+      "SensorDisruptionDesc": "Requires Lock 1. Designate one locked enemy. It suffers a penalty to all rolls (including weapon accuracy) equal to your sensors' Hit Modifier, minimum -1, for 1 round."
+    },
+    "DND5E": {
+      "ShipNamePlaceholder": "Ship Name",
+      "Label": {
+        "ArmourCurrentMax": "Armor Current | Armor Max"
+      },
+      "NpcShip": {
+        "Engineering": "Engineering"
+      },
+      "ShipMode": {
+        "Player": "Player Starship",
+        "NPC":    "NPC Starship",
+        "Ordnance": "Ordnance"
+      },
+      "CreateDialog": {
+        "Title": "Starship Type",
+        "Hint": "Which kind of starship actor should be created?",
+        "Confirm": "Confirm"
+      },
+      "Sheet": {
+        "PlayerShip": "Player Ship Sheet",
+        "NpcShip":    "NPC Ship Sheet",
+        "Ordnance":   "Ordnance Sheet",
+        "Component":  "Ship Component Sheet"
+      },
+      "Component": {
+        "TypeLabel":    "Ship Component",
+        "Stats":        "Statistics",
+        "Slot":         "Component Type",
+        "Damage":       "Damage",
+        "Defence":      "Defence",
+        "DiceCount":    "Damage Dice",
+        "DieSize":      "Die Size",
+        "AcContribution":    "AC Contribution",
+        "ReserveMultiplier": "Reserve Multiplier",
+        "Properties":        "Properties",
+        "OverclockBaseDC":   "Overclock Base DC",
+        "OverclockBaseDCHint": "Base DC for overclock checks at minimum heat. Scales up by 10 at maximum reactor heat.",
+        "ExtendedFields": "Extended Statistics"
+      },
+      "AC": {
+        "Calculation":        "Calculation",
+        "EquippedComponents": "Equipped Components",
+        "ComponentBreakdown": "Component Breakdown"
+      },
+      "Ordnance": {
+        "SetTypePrompt": "Set ordnance type on the Configuration tab."
+      }
+    }
+  }
+}

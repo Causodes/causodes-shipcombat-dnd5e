@@ -1,0 +1,230 @@
+{{!--
+  player-ship-header.hbs
+  Header for PlayerShipSheet — based on dnd5e npc-header.hbs but with:
+    • Proficiency & CR badge removed (top-right box)
+    • Legendary action / resistance / lair action section removed
+    • Ability-scores tray replaced with per-sector ARMOR | SHIELDS table
+--}}
+<header class="sheet-header">
+
+    {{!-- Portrait & Vitals --}}
+    <div class="left">
+
+        {{!-- Portrait --}}
+        {{#if editable}}
+        <button type="button" class="slide-toggle header-interactable" data-action="togglePortrait">
+            {{#if portrait.token}}
+            {{ localize "DOCUMENT.Token" }}
+            <i class="fas fa-toggle-on" inert></i>
+            {{else}}
+            {{ localize "DND5E.Portrait" }}
+            <i class="fas fa-toggle-off" inert></i>
+            {{/if}}
+        </button>
+        {{/if}}
+
+        <div class="portrait {{#if portrait.token}}token{{/if}}">
+
+            {{#with portrait}}
+            {{#if isVideo}}
+            <video src="{{ src }}" autoplay muted disablepictureinpicture loop playsinline
+                   {{#if @root.editable}}data-action="{{ action }}"{{else}}data-action="showArtwork"{{/if}}
+                   {{#if (and @root.editable path)}}data-edit="{{ path }}" data-type="{{ type }}"{{/if}}></video>
+            {{else}}
+            <img src="{{ src }}" alt="{{ @root.actor.name }}"
+                 {{#if @root.editable}}data-action="{{ action }}"{{else}}data-action="showArtwork"{{/if}}
+                 {{#if (and @root.editable path)}}data-edit="{{ path }}" data-type="{{ type }}"{{/if}}>
+            {{/if}}
+            {{/with}}
+
+            {{!-- Initiative — shows captain's skill modifier; click to roll --}}
+            <div class="initiative-wrapper">
+                <button type="button" class="initiative unbutton" data-action="rollInitiative"
+                        data-tooltip="{{localize 'SHIPCOMBAT.Captain.RollInitiativeBtn'}}">
+                    <span>{{ dnd5e-numberFormat captainInitMod signDisplay="always" }}</span>
+                </button>
+            </div>
+
+        </div>
+
+        {{!-- Vitals --}}
+        <div class="bottom vitals">
+
+            {{!-- AC --}}
+            <div class="left ac">
+                <div class="ac-badge badge" aria-label="{{ localize 'DND5E.ArmorClass' }}">
+                    {{#if editable}}
+                    <button type="button" class="config-button unbutton" data-action="showConfiguration"
+                            data-config="armorClass" data-tooltip="DND5E.ArmorConfig"
+                            aria-label="{{ localize 'DND5E.ArmorConfig' }}">
+                        <i class="fas fa-cog" inert></i>
+                    </button>
+                    {{else}}
+                    <div data-attribution="attributes.ac" data-attribution-caption="DND5E.ArmorClass"
+                         data-tooltip-direction="DOWN">
+                        {{ system.attributes.ac.value }}
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+
+            {{!-- HP --}}
+            <div class="right">
+                {{#with system.attributes.hp}}
+                <div class="meter hit-points sectioned">
+                    <div class="progress hit-points {{#if (gt tempmax 0)}}temp-positive{{else if (lt tempmax 0)~}}
+                         temp-negative{{/if}}" role="meter" aria-valuemin="0" aria-valuenow="{{ value }}"
+                         aria-valuemax="{{ max }}" style="--bar-percentage: {{ pct }}%">
+                        <div class="label">
+                            <span class="value">{{ value }}</span>
+                            <span class="separator">&sol;</span>
+                            <span class="max">{{ effectiveMax }}</span>
+                            {{#if tempmax}}
+                            <span class="bonus">{{ dnd5e-numberFormat tempmax signDisplay="always" }}</span>
+                            {{/if}}
+                            {{#if @root.editable}}
+                            <button type="button" class="config-button unbutton" data-action="showConfiguration"
+                                    data-config="hitPoints" data-tooltip="DND5E.HitPointsConfig"
+                                    aria-label="{{ localize 'DND5E.HitPointsConfig' }}">
+                                <i class="fas fa-cog" inert></i>
+                            </button>
+                            {{/if}}
+                        </div>
+                        <input type="text" name="system.hull.value" data-dtype="Number" placeholder="0"
+                               data-max="{{ ifThen effectiveMax effectiveMax max }}"
+                               value="{{ value }}" inputmode="numeric" pattern="^[+=\-]?\d*" hidden>
+                    </div>
+                </div>
+                {{/with}}
+
+                {{!-- Internal Fire --}}
+                <div class="meter sectioned internal-fire-meter">
+                    <div class="internal-fire-display">
+                        <span class="internal-fire-label">{{ localize "SHIPCOMBAT.Term.InternalFire" }}</span>
+                        <input type="number" class="internal-fire-value {{#if internalFire}}active{{/if}}"
+                               name="system.internalFire" value="{{ internalFire }}" min="0">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    {{!-- Name, Labels & Stats --}}
+    <div class="right stats">
+
+        <div class="top">
+
+            {{!-- Name, Type, Size, & Alignment --}}
+            <div class="left">
+
+                {{!-- Name --}}
+                {{#if editable}}
+                <input type="text" name="name" class="document-name uninput" value="{{ actor._source.name }}">
+                {{else}}
+                <div class="document-name">{{ actor.name }}</div>
+                {{/if}}
+
+                {{!-- Size, Type, & Alignment --}}
+                <ul class="labels unlist">
+                    {{!-- Size --}}
+                    <li class="creature-size">
+                        {{#if editable}}
+                        <select class="unselect" name="system.traits.size">
+                            {{ selectOptions CONFIG.actorSizes selected=source.traits.size labelAttr="label" }}
+                        </select>
+                        {{else}}
+                        <span>{{ lookup (lookup CONFIG.actorSizes system.traits.size) "label" }}</span>
+                        {{/if}}
+                    </li>
+
+                    {{!-- Type / Classification --}}
+                    <li class="creature-type">
+                        {{#if editable}}
+                        <button type="button" class="config-button unbutton header-interactable" data-action="showConfiguration"
+                                data-config="starshipType" data-tooltip="SHIPCOMBAT.Label.Classification"
+                                aria-label="{{ localize 'SHIPCOMBAT.Label.Classification' }}">
+                            {{#if source.details.classification}}
+                            <span>{{ source.details.classification }}</span>
+                            {{else}}
+                            <span class="placeholder">{{ localize "SHIPCOMBAT.Label.Classification" }}</span>
+                            {{/if}}
+                            <i class="fas fa-cog" inert></i>
+                        </button>
+                        {{else}}
+                        {{#if system.details.classification}}
+                        <span>{{ system.details.classification }}</span>
+                        {{/if}}
+                        {{/if}}
+                    </li>
+                </ul>
+
+            </div>
+            {{!-- No proficiency / CR badge for player ships --}}
+
+            {{!-- Full Reset button in top-right (mirrors "Long Rest" position on NPC sheet) --}}
+            <div class="right">
+                <div class="left">
+                    <div class="sheet-header-buttons">
+                        <button type="button" class="gold-button"
+                                data-action="fullReset"
+                                data-tooltip="SHIPCOMBAT.Action.FullReset"
+                                aria-label="{{ localize 'SHIPCOMBAT.Action.FullReset' }}">
+                            <i class="fas fa-rotate-left" inert></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {{!-- Per-sector Armor & Shields panel ———————————————————————————————————
+               Reuses the NPC ability-scores structure so dnd5e.css handles
+               the card background, column separators, drop-shadow (::after),
+               and save-tab appearance automatically.
+               Mapping: .label=sector name  .mod=armor value  .score=rend
+                        .save-tab=shield pip (positioned absolute, 80% width)
+        --}}
+        <div class="armor-shields-container">
+        <div class="middle ability-scores card flexrow">
+            <div class="armor-label">{{ localize "SHIPCOMBAT.Label.Armour" }}</div>
+            <div class="ability-score" data-sector="bow">
+                <span class="label">{{ localize "SHIPCOMBAT.Sector.Bow" }}</span>
+                <div class="mod {{#if system.armourRend.bow}}rent{{/if}}" data-tooltip="SHIPCOMBAT.Label.Armour">{{ system.armour.bow }}</div>
+                <div class="save-tab" data-tooltip="SHIPCOMBAT.Label.Shield">
+                    <span class="save {{#if shieldOvercharged.bow}}shield-overcharged{{/if}}">{{ system.shields.bow }}</span>
+                    <i class="fas fa-shield" inert></i>
+                </div>
+            </div>
+            <div class="ability-score" data-sector="stern">
+                <span class="label">{{ localize "SHIPCOMBAT.Sector.Stern" }}</span>
+                <div class="mod {{#if system.armourRend.stern}}rent{{/if}}" data-tooltip="SHIPCOMBAT.Label.Armour">{{ system.armour.stern }}</div>
+                <div class="save-tab" data-tooltip="SHIPCOMBAT.Label.Shield">
+                    <span class="save {{#if shieldOvercharged.stern}}shield-overcharged{{/if}}">{{ system.shields.stern }}</span>
+                    <i class="fas fa-shield" inert></i>
+                </div>
+            </div>
+            <div class="ability-score" data-sector="port">
+                <span class="label">{{ localize "SHIPCOMBAT.Sector.Port" }}</span>
+                <div class="mod {{#if system.armourRend.port}}rent{{/if}}" data-tooltip="SHIPCOMBAT.Label.Armour">{{ system.armour.port }}</div>
+                <div class="save-tab" data-tooltip="SHIPCOMBAT.Label.Shield">
+                    <span class="save {{#if shieldOvercharged.port}}shield-overcharged{{/if}}">{{ system.shields.port }}</span>
+                    <i class="fas fa-shield" inert></i>
+                </div>
+            </div>
+            <div class="ability-score" data-sector="starboard">
+                <span class="label">{{ localize "SHIPCOMBAT.Sector.Starboard" }}</span>
+                <div class="mod {{#if system.armourRend.starboard}}rent{{/if}}" data-tooltip="SHIPCOMBAT.Label.Armour">{{ system.armour.starboard }}</div>
+                <div class="save-tab" data-tooltip="SHIPCOMBAT.Label.Shield">
+                    <span class="save {{#if shieldOvercharged.starboard}}shield-overcharged{{/if}}">{{ system.shields.starboard }}</span>
+                    <i class="fas fa-shield" inert></i>
+                </div>
+            </div>
+        </div>{{!-- /.ability-scores --}}
+        <div class="shields-label">{{ localize "SHIPCOMBAT.Label.Shield" }}</div>
+        </div>{{!-- /.armor-shields-container --}}
+
+    </div>
+
+</header>

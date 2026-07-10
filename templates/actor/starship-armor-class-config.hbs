@@ -1,0 +1,53 @@
+{{!--
+  starship-armor-class-config.hbs
+  Custom AC config popup for player ships.
+
+  Shows:
+    • The computed AC value (sum of equipped armour + engine acContribution)
+    • "Equipped Components" as a read-only (disabled) calculation type
+    • A read-only formula: armour.acContribution(n) + engine.acContribution(n)
+    • A per-component breakdown table
+
+  StarshipArmorClassConfig._preparePartContext injects:
+    context.data.value  — live computed AC
+    context.formula     — static formula string
+    context.breakdown   — [{ name, slot, value }] for all armour/engine components
+--}}
+<section class="flexcol">
+    <div class="final-value">{{ dnd5e-numberFormat data.value }}</div>
+
+    <fieldset class="card">
+        <legend>{{ localize "DND5E.ArmorClassFormula" }}</legend>
+
+        {{!-- Calculation type: static, non-editable --}}
+        <div class="form-group">
+            <label>{{ localize "SHIPCOMBAT.DND5E.AC.Calculation" }}</label>
+            <div class="form-fields">
+                <input type="text" value="{{ localize 'SHIPCOMBAT.DND5E.AC.EquippedComponents' }}" disabled>
+            </div>
+        </div>
+
+        {{!-- Formula: static display --}}
+        <div class="form-group">
+            <label>{{ localize "DND5E.ArmorClassFormula" }}</label>
+            <div class="form-fields">
+                <input type="text" value="{{ formula }}" disabled>
+            </div>
+        </div>
+    </fieldset>
+
+    {{!-- Per-component breakdown --}}
+    {{#if breakdown.length}}
+    <fieldset class="card">
+        <legend>{{ localize "SHIPCOMBAT.DND5E.AC.ComponentBreakdown" }}</legend>
+        {{#each breakdown}}
+        <div class="form-group">
+            <label>{{ name }}</label>
+            <div class="form-fields">
+                <span>+{{ value }}</span>
+            </div>
+        </div>
+        {{/each}}
+    </fieldset>
+    {{/if}}
+</section>

@@ -1,0 +1,264 @@
+/* causodes-shipcombat-dnd5e — header.css */
+
+/* ── Per-sector Armor / Shields panel ──────────────────────────────────────────────────────────
+   We reuse the NPC .ability-scores / .ability-score / .save-tab CSS structure
+   so dnd5e.css handles: card background, column separators, box-shadow (::after),
+   label/mod/score typography, and save-tab appearance.
+   All we need here are the few things dnd5e.css doesn’t provide:
+     • top-margin to separate the panel from the HP/vitals section
+     • .rend-active colouring on the .score (rend) row
+ ────────────────────────────────────────────────────────────────────────────────── */
+
+/* Small top gap between the HP vitals block and the armor/shields panel;
+   extra padding-top makes room for the absolutely-positioned ARMOR label bar.
+   margin-bottom is on the container (see .armor-shields-container below). */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores {
+  padding-top : 22px;
+  /* No z-index override: .shields-label (z-index: 1, later in DOM) naturally
+     sits above the save-tabs that extend below the armor card, which is the
+     intended visual — shield HP numbers appear under the SHIELDS bar. */
+}
+/* Wrapper that lets .shields-label be a sibling of .ability-scores so it
+   paints BELOW the card border instead of over it (no z-index conflict). */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .armor-shields-container {
+  position      : relative;
+  display       : flex;
+  flex-direction: column;
+  margin-bottom : 46px;
+}
+
+/* Rend value: red + bold when there is active rend damage on a sector */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .ability-score .score.rend-active {
+  color      : var(--dnd5e-color-red, #c33);
+  font-weight: bold;
+}
+
+/* Armor mod turns red when any rend has been applied to that sector */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .ability-score .mod.rent {
+  color      : var(--dnd5e-color-red, #c33);
+}
+
+/* ── Center shield value inside each save-tab; colour by charge state ─── */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .save-tab .save {
+  flex       : 1;
+  text-align : center;
+  color      : #00ff88; /* neon green — normal shield value (0 → zone max) */
+}
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .save-tab .save.shield-overcharged {
+  color      : #44aaff; /* bright blue — overcharged (above zone max); matches .shipcombat-arc-val--over */
+  text-shadow: 0 0 6px rgba(68,170,255,0.5);
+}
+
+/* ── ARMOR label bar — full-width bar at top of the card ────────────────── */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .armor-label {
+  position       : absolute;
+  top            : 0;
+  left           : 0;
+  right          : 0;
+  background     : var(--dnd5e-color-maroon);
+  color          : var(--color-text-light-0);
+  text-align     : center;
+  font-family    : var(--dnd5e-font-roboto-condensed);
+  font-size      : var(--font-size-10);
+  font-weight    : bold;
+  text-transform : uppercase;
+  letter-spacing : 0.5px;
+  padding        : 2px 0;
+  border-radius  : 4px 4px 0 0; /* match .card's top corner radius */
+  z-index        : 1;
+}
+
+/* ── SHIELDS label bar — sits flush against the bottom of the card ──────── */
+/* shields-label: top:100% puts it immediately below .ability-scores (no gap).
+   height ≈ 14 px (font-size-10 + 4 px padding).
+   save-tab: top:calc(100%+26px) from .ability-score.  Because .ability-scores
+   has 10 px bottom-padding, this places the tab 16 px below .ability-scores
+   bottom — 2 px clear of the shields-label's 14 px height. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .save-tab {
+  top: calc(100% + 26px);
+}
+/* Remove the separator border on the rightmost column (no delimiter needed). */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .ability-score[data-sector="starboard"] {
+  border-right: none;
+}
+/* Hide the shield icon inside each save-tab — number alone is sufficient. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .save-tab > i {
+  display: none;
+}
+/* Width: 1 % inset each side — wider than the save-tab cluster (2.5 % inset)
+   but still 2 % narrower than the full-width ARMOR bar above.
+   Positioned relative to .armor-shields-container so it sits below the card
+   border with no z-index conflict. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .armor-shields-container .shields-label {
+  position       : absolute;
+  top            : 100%; /* flush against card bottom — no gap */
+  left           : 1%;
+  right          : 1%;
+  background     : var(--dnd5e-color-maroon); /* mirrors ARMOR bar above */
+  color          : var(--color-text-light-0); /* plain white — value spans carry the colour */
+  text-align     : center;
+  font-family    : var(--dnd5e-font-roboto-condensed);
+  font-size      : var(--font-size-10);
+  font-weight    : bold;
+  text-transform : uppercase;
+  letter-spacing : 0.5px;
+  padding        : 2px 0;
+  border-radius  : 0 0 3px 3px;
+  /* inset top: shadow from the card above falling onto this bar;
+     outward bottom: this bar's shadow falling onto the save-tabs below */
+  box-shadow     : inset 0 5px 8px rgba(0,0,0,0.45),
+                   0 5px 10px rgba(0,0,0,0.55);
+  z-index        : 1;
+}
+
+
+/* ── NPC header: editable ARMOR CURRENT | MAX compound in each sector ─────
+   Replaces the standalone Armour table on the overview tab.  Inputs inherit
+   the .mod look (big bold centered numbers); the current value turns red
+   (rent) when below max. ─────────────────────────────────────────────────── */
+.causodes-shipcombat-dnd5e.npc .sheet-header .ability-scores .mod.shipcombat-hdr-armour-compound {
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+  gap             : 2px;
+}
+.causodes-shipcombat-dnd5e.npc .sheet-header .ability-scores .shipcombat-hdr-arm-input {
+  width      : 2.1rem;
+  font-weight: bold;
+  font-size  : var(--font-size-16);
+  color      : var(--dnd5e-ability-mod-color);
+  text-align : center;
+  background : transparent;
+  border     : none;
+  box-shadow : none;
+  height     : unset;
+  padding    : 0;
+}
+.causodes-shipcombat-dnd5e.npc .sheet-header .ability-scores .shipcombat-hdr-arm-input.rent,
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .ability-scores .mod .rent {
+  color: var(--dnd5e-color-red, #c33);
+}
+.causodes-shipcombat-dnd5e.npc .sheet-header .ability-scores .mod .shipcombat-as-sep {
+  color      : var(--color-text-tertiary);
+  font-weight: normal;
+  font-size  : var(--font-size-12);
+}
+
+/* ── Ship classification cog button (creature-type li in player-ship-header) ──────
+   The native .dnd5e2.sheet.actor button.header-interactable rule handles the
+   core appearance (full-width flex, background, gold hover border).
+   We only need to tweak the placeholder colour for the “no classification” state.
+ ────────────────────────────────────────────────────────────────────────────────── */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .labels .creature-type .config-button .placeholder {
+  color: var(--color-text-secondary);
+}
+
+/* ── StarshipClassificationConfig popup (starship-classification class) ─────────── */
+.dnd5e2.starship-classification.config-sheet .final-value {
+  font-size  : var(--font-size-24);
+  text-align : center;
+  padding    : 4px 0 8px;
+}
+
+.dnd5e2.starship-classification.config-sheet .types-list {
+  gap             : 0;
+  clip-path       : polygon(0 0, 100% 0, 100% calc(100% - 1px), 0 calc(100% - 1px));
+  grid-auto-flow  : column;
+  grid-template-rows: repeat(var(--type-rows), auto);
+}
+
+.dnd5e2.starship-classification.config-sheet .type-row {
+  display       : flex;
+  align-items   : center;
+  gap           : 8px;
+  margin-block-end: 0;
+  border-block-end: var(--dnd5e-border-dotted);
+  padding       : 0;
+}
+
+.dnd5e2.starship-classification.config-sheet .type-row label {
+  display        : flex;
+  justify-content: space-between;
+  padding        : 6px 10px;
+  font-size      : var(--font-size-14);
+  font-family    : var(--dnd5e-font-roboto-condensed);
+  flex           : 1;
+}
+
+.dnd5e2.starship-classification.config-sheet .type-row label:hover {
+  cursor    : var(--cursor-pointer);
+  background: var(--radio-list-hover);
+}
+
+.dnd5e2.starship-classification.config-sheet .type-row input[type="radio"] {
+  margin-block-end: 4px;
+}
+
+
+/* ── Internal Fire display (replaces TMP / +MAX row in player ship header) ──────── */
+
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-meter {
+  margin-block-start : 2px;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-display {
+  display        : flex;
+  align-items    : center;
+  justify-content: space-between;
+  padding        : 2px 6px;
+  gap            : 4px;
+  font-size      : var(--font-size-12);
+  font-family    : var(--dnd5e-font-roboto-condensed);
+  background     : rgba(0, 0, 0, 0.06);
+  border-radius  : 3px;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-label {
+  color   : var(--color-text-secondary);
+  flex    : 1;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-value {
+  font-size  : var(--font-size-12);
+  font-weight: bold;
+  min-width  : 1.5em;
+  text-align : right;
+}
+
+/* When rendered as <input type="number"> — strip browser defaults so it
+   looks identical to the old <strong> but gains click-to-edit. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-value[type="number"] {
+  border     : none;
+  background : transparent;
+  padding    : 0;
+  width      : 3em;
+  cursor     : text;
+}
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-value[type="number"]:focus {
+  outline       : 1px solid var(--dnd5e-color-gold);
+  border-radius : 2px;
+}
+
+/* Highlight in red only when Internal Fire is non-zero */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .internal-fire-value.active {
+  color: var(--dnd5e-color-red, #c33);
+}
+
+
+/* ── Full Reset gold button (top-right header, mirrors NPC sheet rest buttons) ────── */
+/* Visual styling is handled entirely by the native .gold-button class.
+   Keep .top items aligned to the start so button position can be controlled
+   precisely via margin-top on .right in both view and edit modes. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .stats > .top {
+  align-items: flex-start;
+}
+/* Align the BOTTOM of the Full Reset button with the BOTTOM of the Name text.
+   Button height = 26 px (NPC sheet-header-buttons override).
+   View mode: Name div ≈ 30 px tall  → margin-top = 30 − 26 = 4 px.
+   Edit mode: Name input ≈ 36 px tall → margin-top = 36 − 26 = 10 px. */
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .stats > .top > .right {
+  margin-top: 4px;
+}
+.causodes-shipcombat-dnd5e:is(.player, .npc) .sheet-header .stats > .top:has(input.document-name) > .right {
+  margin-top: 6px;
+}

@@ -1,0 +1,60 @@
+{{!--
+  component-extended-fields.hbs — dnd5e-specific fields for the core component
+  item sheet partial "component-extended-fields".
+
+  Registered via ShipCombat.registerPartialOverride("component-extended-fields", ...).
+
+  Expected context keys (provided by ShipComponentSheet._preparePartContext):
+    item           — the Item document
+    source         — item._source.system
+    fields         — item.system.schema.fields (DataFields)
+    damageTypes    — array of { value, label } for the damage type selector
+    config         — CONFIG.DND5E
+--}}
+<fieldset class="dnd5e-component-extended-fields">
+  <legend>{{localize "SHIPCOMBAT.DND5E.Component.ExtendedFields"}}</legend>
+
+  {{!-- Dice Count --}}
+  <div class="form-group">
+    <label>{{localize "SHIPCOMBAT.DND5E.Component.DiceCount"}}</label>
+    <div class="form-fields">
+      <input type="number" name="system.diceCount"
+             value="{{source.diceCount}}" min="0" step="1">
+    </div>
+  </div>
+
+  {{!-- Die Size --}}
+  <div class="form-group">
+    <label>{{localize "SHIPCOMBAT.DND5E.Component.DieSize"}}</label>
+    <div class="form-fields">
+      <select name="system.dieSize">
+        <option value="d4"  {{#if (eq source.dieSize "d4") }}selected{{/if}}>d4</option>
+        <option value="d6"  {{#if (eq source.dieSize "d6") }}selected{{/if}}>d6</option>
+        <option value="d8"  {{#if (eq source.dieSize "d8") }}selected{{/if}}>d8</option>
+        <option value="d10" {{#if (eq source.dieSize "d10")}}selected{{/if}}>d10</option>
+        <option value="d12" {{#if (eq source.dieSize "d12")}}selected{{/if}}>d12</option>
+        <option value="d20" {{#if (eq source.dieSize "d20")}}selected{{/if}}>d20</option>
+      </select>
+    </div>
+  </div>
+
+  {{!-- AC Contribution (input name tracks the active slot type) --}}
+  {{#if (eq source.slot "armour")}}
+  <div class="form-group">
+    <label>{{localize "SHIPCOMBAT.DND5E.Component.AcContribution"}}</label>
+    <div class="form-fields">
+      <input type="number" name="system.acContributionArmor"
+             value="{{source.acContributionArmor}}" min="0" step="1">
+    </div>
+  </div>
+  {{else if (eq source.slot "engine")}}
+  <div class="form-group">
+    <label>{{localize "SHIPCOMBAT.DND5E.Component.AcContribution"}}</label>
+    <div class="form-fields">
+      <input type="number" name="system.acContributionEngine"
+             value="{{source.acContributionEngine}}" min="0" step="1">
+    </div>
+  </div>
+  {{/if}}
+
+</fieldset>

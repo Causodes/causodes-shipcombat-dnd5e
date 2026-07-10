@@ -1,0 +1,105 @@
+{{!--
+  ordnance/header.hbs — Header for OrdnanceSheet.
+
+  Cloned from the structural pattern in player-ship-header.hbs (itself based
+  on dnd5e's native npc-header.hbs): a `.left` portrait column sized to match
+  the sidebar width below it, and a `.right.stats` column spanning the
+  remaining (main-content) width — NOT core's OrdnanceSheetMixin's own
+  compact ordnance-header.hbs, which was built for a plain, sidebar-less AppV2
+  host and doesn't respect dnd5e's two-column NPC sheet layout.
+--}}
+<header class="sheet-header">
+
+    {{!-- Portrait — native dnd5e token/portrait toggle --}}
+    <div class="left">
+        {{#if editable}}
+        <button type="button" class="slide-toggle header-interactable" data-action="togglePortrait">
+            {{#if portrait.token}}
+            {{ localize "DOCUMENT.Token" }}
+            <i class="fas fa-toggle-on" inert></i>
+            {{else}}
+            {{ localize "DND5E.Portrait" }}
+            <i class="fas fa-toggle-off" inert></i>
+            {{/if}}
+        </button>
+        {{/if}}
+
+        <div class="portrait {{#if portrait.token}}token{{/if}}">
+            {{#with portrait}}
+            {{#if isVideo}}
+            <video src="{{ src }}" autoplay muted disablepictureinpicture loop playsinline
+                   {{#if @root.editable}}data-action="{{ action }}"{{else}}data-action="showArtwork"{{/if}}
+                   {{#if (and @root.editable path)}}data-edit="{{ path }}" data-type="{{ type }}"{{/if}}></video>
+            {{else}}
+            <img src="{{ src }}" alt="{{ @root.actor.name }}"
+                 {{#if @root.editable}}data-action="{{ action }}"{{else}}data-action="showArtwork"{{/if}}
+                 {{#if (and @root.editable path)}}data-edit="{{ path }}" data-type="{{ type }}"{{/if}}>
+            {{/if}}
+            {{/with}}
+        </div>
+
+        {{!-- AC — system.armorClass (the ordnance attack-target AC), not the
+             ship's component-summed attributes.ac. Same cog-button pattern as
+             the native header: edit mode opens OrdnanceArmorClassConfig
+             (hardcoded to "Flat" — ordnance has no calc-mode choice); play
+             mode just shows the value. --}}
+        <div class="bottom vitals">
+            <div class="left ac">
+                <div class="ac-badge badge" aria-label="{{ localize 'DND5E.ArmorClass' }}">
+                    {{#if editable}}
+                    <button type="button" class="config-button unbutton" data-action="showConfiguration"
+                            data-config="armorClass" data-tooltip="DND5E.ArmorConfig"
+                            aria-label="{{ localize 'DND5E.ArmorConfig' }}">
+                        <i class="fas fa-cog" inert></i>
+                    </button>
+                    {{else}}
+                    <div data-tooltip-direction="DOWN">{{ sys.armorClass }}</div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Name & ordnance bars — spans the main-content width, not the sidebar column --}}
+    <div class="right stats">
+
+        {{#if editable}}
+        <input type="text" name="name" class="document-name uninput" value="{{ actor._source.name }}" placeholder="Ordnance">
+        {{else}}
+        <div class="document-name">{{ actor.name }}</div>
+        {{/if}}
+
+        {{!-- Ordnance type — mirrors the size/classification labels row on the ship sheets --}}
+        {{#if ordnanceTypeLabel}}
+        <ul class="labels unlist">
+            <li class="creature-type">
+                <span>{{ ordnanceTypeLabel }}</span>
+            </li>
+        </ul>
+        {{/if}}
+
+        {{#if isTorpedo}}
+        <div class="shipcombat-torpedo-bars">
+            {{> "vessel-resource-bar"
+                label=hullBarLabel fillClass="hull" pct=hullPct value=hullDisplayValue max=sys.hull.max}}
+            {{> "vessel-resource-bar"
+                label="Fuel" fillClass="fuel" pct=fuelPct value=sys.fuel.value max=sys.fuel.max}}
+        </div>
+        {{else if isStrikeCraft}}
+        <div class="shipcombat-torpedo-bars">
+            {{> "vessel-resource-bar"
+                label=hullBarLabel fillClass="hull" pct=hullPct value=hullDisplayValue max=sys.hull.max}}
+            {{> "vessel-resource-bar"
+                label="Fuel" fillClass="fuel" pct=fuelPct value=sys.fuel.value max=sys.fuel.max}}
+            {{> "vessel-resource-bar"
+                label="Ammo" fillClass="ammo" pct=ammoPct value=sys.ammo.value max=sys.ammo.max}}
+        </div>
+        {{else}}
+        <div class="shipcombat-torpedo-bars" style="align-items:center;padding:4px 0;">
+            <em style="font-size:0.75rem;opacity:0.6;">{{ localize "SHIPCOMBAT.DND5E.Ordnance.SetTypePrompt" }}</em>
+        </div>
+        {{/if}}
+
+    </div>
+
+</header>

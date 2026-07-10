@@ -1,0 +1,24 @@
+{{!--
+  starship-subtype-prompt.hbs — content for the Starship subtype selection
+  dialog shown after picking "Starship" in the Create Actor dialog.
+
+  Mirrors the radio-card list markup of dnd5e's document-create.hbs so the
+  system's `.dnd5e2.create-document` styling applies verbatim (the window
+  title is hidden by that styling; the header span stands in for it).
+--}}
+<div>
+    <header>
+        <span class="document-name">{{ localize "SHIPCOMBAT.DND5E.CreateDialog.Title" }}</span>
+    </header>
+    <ol class="unlist card">
+        {{#each types}}
+        <li>
+            <label>
+                {{ dnd5e-icon icon alt=label }}
+                <span>{{ label }}</span>
+                <input type="radio" name="subtype" value="{{ value }}" required {{ checked selected }}>
+            </label>
+        </li>
+        {{/each}}
+    </ol>
+</div>

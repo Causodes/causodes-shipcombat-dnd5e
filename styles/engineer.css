@@ -1,0 +1,65 @@
+/* causodes-shipcombat-dnd5e — engineer.css */
+
+/* ── Section overlay button — match dnd5e dark-gray ─────────────────────── */
+.causodes-shipcombat-dnd5e [data-tab="engineer"] .shipcombat-section-overlay-btn,
+.causodes-shipcombat-dnd5e [data-tab="engineer5man"] .shipcombat-section-overlay-btn,
+.causodes-shipcombat-dnd5e [data-tab="engineer3man"] .shipcombat-section-overlay-btn {
+  background: var(--dnd5e-color-dark-gray);
+}
+
+/* ── Valid (available) overlay — teal scan-lines + outline ──────────────── */
+/* The base .shipcombat-section-overlay (no modifier = action available) gets  */
+/* the same scan-line treatment as the --taken (red) and --selected (green)    */
+/* modifiers, but in the existing teal palette.                                 */
+.causodes-shipcombat-dnd5e [data-tab="engineer"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical),
+.causodes-shipcombat-dnd5e [data-tab="engineer5man"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical),
+.causodes-shipcombat-dnd5e [data-tab="engineer3man"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical) {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0)    0px,
+      rgba(0, 0, 0, 0)    2px,
+      rgba(0, 0, 0, 0.28) 2px,
+      rgba(0, 0, 0, 0.28) 3px
+    ),
+    linear-gradient(
+      rgba(4, 80, 90, 0.52),
+      rgba(2, 50, 58, 0.46)
+    );
+  border: 1px solid rgba(6, 140, 155, 0.50);
+  box-shadow: inset 0 0 16px rgba(6, 120, 135, 0.28);
+}
+
+/* ── Overlay background lightens to teal on BUTTON hover (not section hover) */
+/* :has() lets the PARENT react when a CHILD element is hovered, so the full  */
+/* overlay brightens only when the pointer is over the clickable button.       */
+.causodes-shipcombat-dnd5e [data-tab="engineer"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical):has(.shipcombat-section-overlay-btn:hover),
+.causodes-shipcombat-dnd5e [data-tab="engineer5man"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical):has(.shipcombat-section-overlay-btn:hover),
+.causodes-shipcombat-dnd5e [data-tab="engineer3man"] .shipcombat-section-overlay:not(.shipcombat-section-overlay--taken):not(.shipcombat-section-overlay--selected):not(.shipcombat-section-overlay--critical):has(.shipcombat-section-overlay-btn:hover) {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0)    0px,
+      rgba(0, 0, 0, 0)    2px,
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 3px
+    ),
+    linear-gradient(
+      rgba(0, 175, 195, 0.78),
+      rgba(0, 140, 158, 0.70)
+    );
+  border-color: rgba(0, 195, 215, 0.85);
+  box-shadow: inset 0 0 22px rgba(0, 195, 215, 0.45);
+}
+
+/* ── Button itself — text-glow on hover so it reads as the click target ──── */
+.causodes-shipcombat-dnd5e .shipcombat-section-overlay-btn:hover:not([disabled]) {
+  text-shadow: 0 0 6px #00c3d7, 0 0 12px #00c3d7;
+}
+
+/* ── Docked status bar — matches sensors bar (all tabs unified) ──────────── */
+.causodes-shipcombat-dnd5e [data-tab="engineer"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="engineer5man"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="engineer3man"] .shipcombat-role-status-bar {
+ background: var(--dnd5e-color-dark-gray);
+}

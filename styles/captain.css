@@ -1,0 +1,8 @@
+/* causodes-shipcombat-dnd5e — captain.css */
+
+/* ── Docked status bar — matches sensors bar (all tabs unified) ──────────── */
+.causodes-shipcombat-dnd5e [data-tab="captain"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="captain5man"] .shipcombat-role-status-bar,
+.causodes-shipcombat-dnd5e [data-tab="captain4man"] .shipcombat-role-status-bar {
+ background: var(--dnd5e-color-dark-gray);
+}

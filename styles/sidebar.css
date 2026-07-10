@@ -1,0 +1,129 @@
+/* causodes-shipcombat-dnd5e — sidebar.css */
+
+/* ── Ship-mode select (player ship sidebar) ──────────────────────────────────
+   Rendered inside .name div at top of .sidebar, matching the vehicle sheet's
+   type dropdown styling.
+ ──────────────────────────────────────────────────────────────────────────── */
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .main-content .sidebar {
+  gap         : 0 !important;   /* NPC uses gap: 16px — too wide for compact trait list */
+  padding-top : 4px !important; /* NPC uses padding-top: 12px */
+  overflow    : hidden;         /* clip content so nothing peeks out when sliding off */
+}
+
+/* When the sidebar is collapsed, remove the top padding so no visible edge
+   remains at the left of the sheet body after the negative margin slides the
+   sidebar off-screen. */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance).sidebar-collapsed .main-content .sidebar {
+  padding-top : 0 !important;
+  overflow    : hidden;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .name {
+  margin-bottom: 2px;
+}
+
+/* Ship-mode select — matches native vehicle .sheet-sidebar .name select */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .name select {
+  padding     : 4px;
+  background  : var(--npc-header-input-background);
+  font-family : var(--dnd5e-font-roboto-condensed);
+}
+
+/* ── Trait-line additional fields (Size, Travel Speed, etc.) ─────────────────
+   The actor-trait-line partial renders a .pills-group with an h3 containing
+   an icon, label span, and value input/select in a flex row.  The native
+   vehicle sheet styles these via .vehicle .sheet-sidebar .pills-group — but
+   our NPC-derived sheet doesn't receive those rules, so we apply them here.
+ ──────────────────────────────────────────────────────────────────────────── */
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group:not(.edit-inline) {
+  padding-left : 8px;
+  margin-top   : 16px;
+}
+
+/* Trait-line sections (Size, Cost, Weight, etc.) — 6px spacing like native vehicle */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group.edit-inline {
+  padding-left : 8px;
+  margin-top   : 6px;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 {
+  padding  : 0 !important;
+  margin   : 0 !important;
+  font-size: var(--font-size-11);
+}
+/* Restore a small gap between section header and pill badges only when
+   badges are actually present (non-empty group = has values to display). */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group:not(.empty) h3 {
+  margin-bottom: 3px !important;
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 > i,
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 > span {
+  font-size : var(--font-size-11);
+}
+
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 .counter {
+  font-family  : var(--dnd5e-font-roboto);
+  font-weight  : normal;
+  /* Inline (not flex) so Intl.NumberFormat part-spans (integer/group/unit) render
+     as normal text — flex gap would add space between commas and digit groups */
+  white-space  : nowrap;
+  flex-shrink  : 0;
+}
+/* Cost counter only: flex so the currency icon aligns vertically with the number */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 .counter:has(> i.currency) {
+  display      : inline-flex;
+  align-items  : center;
+  gap          : 2px;
+}
+
+/* Value inputs & selects sit at the end of the flex row */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 input,
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 select {
+  flex        : 1;
+  line-height : unset;
+  font-size   : inherit;
+  text-align  : center;
+  padding     : 0;
+  margin-left : auto;
+  font-family : var(--dnd5e-font-roboto);
+  font-weight : normal;
+}
+
+/* .value inputs/selects get a fixed 55px width matching the native vehicle */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 input.value,
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group h3 select.value {
+  flex : 0 0 55px;
+}
+
+/* ── Edit-inline trait-line specific styling (mirrors native vehicle) ─────────
+   These rules match the vehicle's .sheet-sidebar .pills-group.edit-inline CSS.
+ ──────────────────────────────────────────────────────────────────────────── */
+
+/* Fixed label width so all value inputs start at the same horizontal position
+   (mirrors: .vehicle .sheet-sidebar .pills-group.edit-inline h3 > span:first-of-type { flex: 0 0 45px }) */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group.edit-inline h3 > span:first-of-type {
+  flex : 0 0 45px;
+}
+
+/* Larger gap when transitioning from a gear-button row (non-edit-inline) to
+   the first trait-line row (edit-inline) — e.g. Travel Pace → Cost */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group:not(.edit-inline) + .pills-group.edit-inline {
+  margin-top : 14px;
+}
+
+/* Selects in edit-inline rows are left-aligned (not centered) */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group.edit-inline select {
+  text-align    : left;
+  padding-inline: 4px;
+}
+
+/* Unit selects (gp, lb, ft, etc.) — fixed 34px like native vehicle */
+.causodes-shipcombat-dnd5e:is(.player, .npc, .ordnance) .sidebar .pills-group.edit-inline.units select {
+  flex    : 0 0 34px;
+  width   : 34px;
+  padding : 0;
+}
+

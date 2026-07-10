@@ -1,0 +1,22 @@
+/* causodes-shipcombat-dnd5e — sensors.css */
+
+/* ── Docked status bar — dark near-black, matches dnd5e dark-gray ─────────── */
+.causodes-shipcombat-dnd5e [data-tab="sensors"] .shipcombat-role-status-bar {
+  background: var(--dnd5e-color-dark-gray);
+  /* top inherits from core: top: 0 */
+}
+
+
+/* ── Scroll-drift fix ───────────────────────────────────────────────────────
+   ApplicationV2's scrollable: [""] gives this tab section overflow-y: auto,
+   which makes it the nearest scroll-container ancestor for position:sticky.
+   But the real scrolling happens one level up in .sheet-body (the element
+   with overflow: hidden auto).  Removing the scroll-container barrier here
+   lets the sticky status-bar propagate up to .sheet-body, so it correctly
+   docks flush below the armor/shield header on scroll. */
+.causodes-shipcombat-dnd5e [data-tab="sensors"] {
+  overflow: visible !important;
+  /* Zero out the tab's 8px top padding so the docked bar's natural flow
+     position is flush with .sheet-body's top edge (matching sticky top: 0). */
+  padding-top: 0;
+}

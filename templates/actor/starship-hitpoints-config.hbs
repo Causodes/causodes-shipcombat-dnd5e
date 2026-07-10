@@ -1,0 +1,30 @@
+{{!--
+  starship-hitpoints-config.hbs
+  Custom HP config popup for player ships — omits Temporary Maximum,
+  Temporary Hit Points, and Damage Threshold (all irrelevant for ships).
+  Keeps:
+    • Maximum Hit Points  (hull.max  → shown via source.max)
+    • Health Formula      (hp.formula, with λ button from FormulaField)
+    • Current Hit Points  (hull.value → shown via source.value)
+  StarshipHitPointsConfig._preparePartContext injects hull values as source.
+  StarshipHitPointsConfig._processSubmitData remaps max/value writes to hull.
+--}}
+<section class="flexcol">
+    <div class="final-value">{{ dnd5e-numberFormat data.value }} / {{ dnd5e-numberFormat data.effectiveMax }}</div>
+    <fieldset class="card">
+        <legend>{{ localize "DND5E.HitPointsMax" }}</legend>
+        {{ formField fields.max value=source.max localize=true }}
+        {{#if fields.formula}}
+        <div class="form-group">
+            <label>{{ localize fields.formula.label }}</label>
+            <div class="form-fields">
+                {{ formInput fields.formula value=source.formula }}
+            </div>
+        </div>
+        {{/if}}
+    </fieldset>
+    <fieldset class="card">
+        <legend>{{ localize "DND5E.HitPointsCurrent" }}</legend>
+        {{ formField fields.value value=source.value localize=true }}
+    </fieldset>
+</section>

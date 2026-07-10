@@ -1,0 +1,36 @@
+{{!--
+  ordnance/armor-class-config.hbs — AC config popup for Ordnance actors.
+
+  Unlike the ship's version (starship-armor-class-config.hbs, computed
+  read-only from equipped components) ordnance AC is a single editable flat
+  value (system.armorClass — the attack-target AC), with the calculation
+  type hardcoded to "Flat" (no dropdown; there is no other calc mode for
+  ordnance).
+
+  OrdnanceArmorClassConfig._preparePartContext injects:
+    context.value — system.armorClass, defaulting to 0
+--}}
+<section class="flexcol">
+    <div class="final-value">{{ dnd5e-numberFormat value }}</div>
+
+    <fieldset class="card">
+        <legend>{{ localize "DND5E.ArmorClassFormula" }}</legend>
+
+        {{!-- Calculation type: hardcoded to Flat, non-editable --}}
+        <div class="form-group">
+            <label>{{ localize "SHIPCOMBAT.DND5E.AC.Calculation" }}</label>
+            <div class="form-fields">
+                <input type="text" value="{{ localize 'DND5E.Flat' }}" disabled>
+            </div>
+        </div>
+
+        {{!-- Flat value: editable --}}
+        <div class="form-group">
+            <label>{{ localize "DND5E.ArmorClassFlat" }}</label>
+            <div class="form-fields">
+                <input type="text" name="system.armorClass" data-dtype="Number" value="{{ value }}"
+                       inputmode="numeric" pattern="^[+=\-]?\d*">
+            </div>
+        </div>
+    </fieldset>
+</section>

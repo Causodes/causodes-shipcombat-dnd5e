@@ -1,0 +1,172 @@
+/* causodes-shipcombat-dnd5e — shared.css */
+
+/* ── Denim texture on all docked role status bars ────────────────────────────
+   Mirrors the repeating denim075.png texture used by the dnd5e dark NPC sheet
+   (--dnd5e-background-texture-denim). Applied via background-image only so that
+   each tab's background-color override in its own CSS file is preserved.
+   !important is needed because the per-tab rules use the `background` shorthand,
+   which implicitly resets background-image to none. ── */
+.causodes-shipcombat-dnd5e .shipcombat-role-status-bar {
+  background-image: url("../../../ui/denim075.png") !important;
+}
+
+/* ── Ship component item sheet — slot-group visibility ───────────────────── */
+/* All [data-slot-group] fieldsets start with class="hidden"; JS in
+   ShipComponentSheet._applySlotVisibility() removes it for the active slot. */
+.causodes-shipcombat-dnd5e [data-slot-group].hidden {
+  display: none;
+}
+
+/* Positioning context for the λ control-button inside split-group damage rows.
+   The control-button is positioned absolute (inset: auto 0 0 auto) by dnd5e's
+   CSS, overlaying the rightmost column (Bonus).  Without this, it positions
+   relative to the application window instead. */
+.causodes-shipcombat-dnd5e .form-group.split-group > .form-fields {
+  position: relative;
+}
+
+/* ── Weapon component — Properties list (ship traits as dnd5e-style tags) ── */
+.causodes-shipcombat-dnd5e .shipcombat-properties-group .form-fields {
+  align-items: flex-start;
+}
+.causodes-shipcombat-dnd5e .shipcombat-properties-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.5rem;
+  padding: 0;
+  width: 100%;
+}
+.causodes-shipcombat-dnd5e .shipcombat-property {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  background: var(--dnd5e-background-card, rgba(0,0,0,0.08));
+  border: 1px solid var(--color-border-light-1, rgba(0,0,0,0.15));
+  border-radius: 3px;
+  font-size: var(--font-size-11, 11px);
+  white-space: nowrap;
+}
+.causodes-shipcombat-dnd5e .shipcombat-property--valued input[type="number"] {
+  width: 2.8rem;
+  text-align: center;
+}
+
+/* ── Ship config tab — component list row layout ──────────────────────────── */
+/* The core CSS scopes these rules to .shipcombat-ship/.shipcombat-component;
+   the dnd5e sheet uses .causodes-shipcombat-dnd5e so we need our own copies. */
+.causodes-shipcombat-dnd5e .sheet-list .list-content .row-content {
+  height: 2rem;
+}
+.causodes-shipcombat-dnd5e .sheet-list .row-content {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-right: 1.0rem;
+}
+.causodes-shipcombat-dnd5e .sheet-list .row-content .list-name {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  flex: 2;
+  gap: 0.4rem;
+}
+.causodes-shipcombat-dnd5e .sheet-list .row-content .list-name img {
+  flex: 0 0 2rem;
+  height: 2rem;
+  width: 2rem;
+}
+.causodes-shipcombat-dnd5e .sheet-list .row-content .list-name .label {
+  margin: 0;
+}
+.causodes-shipcombat-dnd5e .sheet-list .row-content .list-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ── Zone value 2×2 grid (Shield thresholds, Armour values) ─────────────── */
+/* Used by .form-fields children that need exactly two columns of label-top
+   inputs so zone fields (Bow/Stern top row, Port/Starboard bottom row) are
+   displayed in a readable grid rather than a cramped single-row strip. */
+.causodes-shipcombat-dnd5e .zone-2col-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 0.5rem;
+}
+
+/* Remove the dnd5e scroll-fade mask from our ship sheet-bodies.
+   The mask fades the top 8px of .sheet-body transparent, which would
+   either create a visible gap above the docked bar (if top: 8px) or
+   clip its top edge (if top: 0).  Ship sheets don't need this fade. */
+.causodes-shipcombat-dnd5e .sheet-body {
+  mask-image: none !important;
+}
+
+/* ── Core status badge (Core Ready / Core Staged / No Core) ─────────────────
+   Rendered by core's core-status-banner partial inside sheet-list headers on
+   the player ship role tabs.  Styled as a dnd5e-style pill badge; state
+   variants colour it green (ready), amber (staged), or muted (none). */
+.causodes-shipcombat-dnd5e .shipcombat-core-badge {
+  display        : inline-flex;
+  align-items    : center;
+  gap            : 4px;
+  padding        : 1px 8px;
+  margin-right   : 4px;
+  border-radius  : 3px;
+  border         : 1px solid;
+  font-family    : var(--dnd5e-font-roboto-condensed);
+  font-size      : var(--font-size-10);
+  font-weight    : bold;
+  text-transform : uppercase;
+  letter-spacing : 0.5px;
+  line-height    : 1.6;
+  white-space    : nowrap;
+}
+.causodes-shipcombat-dnd5e .shipcombat-core-badge--assigned {
+  color        : #1b7a3d;
+  border-color : rgba(27, 122, 61, 0.5);
+  background   : rgba(46, 204, 113, 0.12);
+}
+.causodes-shipcombat-dnd5e .shipcombat-core-badge--staged {
+  color        : #a66a00;
+  border-color : rgba(166, 106, 0, 0.5);
+  background   : rgba(232, 163, 58, 0.12);
+}
+.causodes-shipcombat-dnd5e .shipcombat-core-badge--none {
+  color        : var(--color-text-secondary);
+  border-color : rgba(0, 0, 0, 0.25);
+  background   : rgba(0, 0, 0, 0.05);
+}
+.causodes-shipcombat-dnd5e .shipcombat-core-badge .shipcombat-core-pulse {
+  animation: causodes-core-pulse 2s ease-in-out infinite;
+}
+@keyframes causodes-core-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+/* ── Section header titles — native "Public"/"Details" header style ────────
+   Applies to every sheet-list header across the player ship, NPC ship, and
+   ordnance tabs.  Matches the dnd5e biography textbox headers (h3.icon >
+   span.roboto-upper) minus the icon: Roboto bold uppercase text with no
+   background bar or border box.  The .row-content qualifier keeps this above
+   core's .shipcombat-ship .sheet-list .list-header box styling. */
+.causodes-shipcombat-dnd5e .sheet-list .list-header.row-content,
+.causodes-shipcombat-dnd5e .sheet-list .list-header {
+  background: none;
+  border: none;
+  height: auto;
+  line-height: normal;
+  padding: 0 16px 2px 0;
+  margin-bottom: 2px;
+}
+.causodes-shipcombat-dnd5e .sheet-list .list-header.row-content .list-name,
+.causodes-shipcombat-dnd5e .sheet-list .list-header .list-name {
+  font-family: var(--dnd5e-font-roboto);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: var(--font-size-13);
+  color: var(--color-text-primary);
+  margin: 0;
+}

@@ -1,0 +1,84 @@
+{{!--
+  ship-header.hbs — dnd5e player ship header partial.
+  Overrides the core "ship-header" partial via ShipCombat.registerPartialOverride.
+
+  Expected context (from ShipController.buildContext + BaseStarshipSheet):
+    actor        — the Actor document
+    sys          — actor.system
+    hullPct      — hull percentage (0–100)
+    hullBarLabel — localised hull bar label
+    editable     — whether the sheet is in edit mode
+--}}
+<div class="shipcombat-header shipcombat-ship-header dnd5e-ship-header">
+
+  {{!-- Portrait --}}
+  <img class="profile" data-action="editImage" src="{{actor.img}}"
+       data-edit="img" data-tooltip="{{actor.name}}" data-tooltip-direction="UP">
+
+  {{!-- Name + identity row --}}
+  <header class="sheet-header">
+    <div class="header-details">
+      <div class="details-row name">
+        <input type="text" name="name" value="{{actor.name}}"
+               placeholder="{{localize 'SHIPCOMBAT.DND5E.ShipNamePlaceholder'}}">
+      </div>
+      <div class="details-row dnd5e-ship-meta">
+        <div class="detail-group">
+          <div class="input-group">
+            <input type="text" name="system.details.type.value"
+                   value="{{sys.details.type.value}}"
+                   placeholder="{{localize 'DND5E.CreatureType'}}">
+          </div>
+          <label>{{localize "DND5E.CreatureType"}}</label>
+        </div>
+        <div class="detail-group">
+          <div class="input-group">
+            <input type="text" name="system.details.cr"
+                   value="{{sys.details.cr}}"
+                   placeholder="{{localize 'DND5E.ChallengeRating'}}">
+          </div>
+          <label>{{localize "DND5E.ChallengeRating"}}</label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- HP / AC row --}}
+  <div class="shipcombat-ship-attr-row dnd5e-ship-attr-row">
+
+    {{!-- Hull Points (≈ HP) --}}
+    <div class="shipcombat-ship-attr-box">
+      <div class="shipcombat-ship-attr-label">{{hullBarLabel}}</div>
+      <div class="shipcombat-ship-attr-fields">
+        <input type="number" name="system.hull.value"
+               value="{{sys.hull.value}}" min="0">
+        <span class="shipcombat-hull-sep">/</span>
+        <input type="number" name="system.hull.max"
+               value="{{sys.hull.max}}" min="0">
+      </div>
+      <div class="shipcombat-hp-bar-wrap">
+        <div class="shipcombat-hp-bar" style="width: {{hullPct}}%;"></div>
+      </div>
+    </div>
+
+    {{!-- Armour Class --}}
+    <div class="shipcombat-ship-attr-box dnd5e-ac-box">
+      <div class="shipcombat-ship-attr-label">{{localize "DND5E.ArmorClass"}}</div>
+      <div class="shipcombat-ship-attr-fields">
+        <input type="number" name="system.attributes.ac.flat"
+               value="{{sys.attributes.ac.flat}}" min="0">
+      </div>
+    </div>
+
+    {{!-- Initiative / Speed row --}}
+    <div class="shipcombat-ship-attr-box">
+      <div class="shipcombat-ship-attr-label">{{localize "DND5E.Initiative"}}</div>
+      <div class="shipcombat-ship-attr-fields">
+        <input type="number" name="system.attributes.init.total"
+               value="{{sys.attributes.init.total}}">
+      </div>
+    </div>
+
+  </div>
+
+</div>

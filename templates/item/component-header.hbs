@@ -1,0 +1,30 @@
+{{!--
+  component-header.hbs — minimal header for the ShipComponentSheet.
+  Mirrors dnd5e's stock items/header.hbs layout (.left image + .middle identity)
+  without calling {{formInput}} for quantity/weight/price fields that don't
+  exist in ShipComponentModel.
+--}}
+<section class="sheet-header">
+
+  {{!-- Image (constrained by dnd5e's .document-image sizing rules) --}}
+  <div class="left">
+    <img class="document-image"
+         src="{{item.img}}"
+         alt="{{item.name}}"
+         {{~#if editable}} data-action="editImage" data-edit="img"{{else}} data-action="showIcon"{{/if}}>
+  </div>
+
+  {{!-- Name & type label --}}
+  <div class="middle identity-info">
+    {{#if editable}}
+      {{formInput name.field value=name.editable input=inputs.createTextInput
+                  classes="document-name uninput"}}
+    {{else}}
+      <div class="document-name">{{item.name}}</div>
+    {{/if}}
+    <ul class="subtitles unlist">
+      <li>{{localize "SHIPCOMBAT.DND5E.Component.TypeLabel"}}</li>
+    </ul>
+  </div>
+
+</section>

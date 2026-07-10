@@ -1,0 +1,38 @@
+{{!--
+  starship-movement-config.hbs
+  Configuration popup for starship travel speed, pace, and unit.
+  Opened via the gear button on the Travel Speed / Travel Pace sidebar rows.
+--}}
+<div class="form-body">
+
+    {{!-- Travel Speed --}}
+    <div class="form-group">
+        <label>{{ localize "DND5E.TRAVEL.Speed" }}</label>
+        <div class="form-fields">
+            <input type="number" name="speeds-max" min="0" step="1"
+                   value="{{ travel.speedsMax }}" placeholder="—">
+        </div>
+    </div>
+
+    {{!-- Travel Pace --}}
+    <div class="form-group">
+        <label>{{ localize "DND5E.TRAVEL.Label" }}</label>
+        <div class="form-fields">
+            <input type="number" name="paces-max" min="0" step="1"
+                   value="{{ travel.pacesMax }}" placeholder="—">
+        </div>
+    </div>
+
+    {{!-- Unit --}}
+    <div class="form-group">
+        <label>{{ localize "DND5E.MovementUnits" }}</label>
+        <div class="form-fields">
+            <select name="units">
+                {{#each movementUnits}}
+                <option value="{{ value }}"{{#if selected}} selected{{/if}}>{{ label }}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+</div>

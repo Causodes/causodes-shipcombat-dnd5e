@@ -1,0 +1,24 @@
+/* causodes-shipcombat-dnd5e — overview.css */
+
+/* ── Bridge Crew table ────────────────────────────────────────────────────────
+   The core module centres both the Role and Action columns.  Override the
+   Role column to left-align so the title text and its editable input both
+   read naturally left-to-right.
+   ──────────────────────────────────────────────────────────────────────────── */
+.causodes-shipcombat-dnd5e .shipcombat-crew-col-role {
+  text-align   : left;
+  padding-left : 2px;
+}
+
+.causodes-shipcombat-dnd5e .shipcombat-role-title-input {
+  text-align : left;
+}
+
+/* ── Full Reset link (crew-table column header) ───────────────────────────────
+   Core renders a small reset link inside the crew table's Skill column header.
+   The 5e player-ship sheet promotes this action to a prominent gold button in
+   the sheet header instead, so we hide the crew-table duplicate.
+   ──────────────────────────────────────────────────────────────────────────── */
+.causodes-shipcombat-dnd5e.player .shipcombat-full-reset-link {
+  display: none;
+}

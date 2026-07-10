@@ -1,0 +1,133 @@
+{{!--
+  npc-ship-header.hbs — dnd5e NPC ship header partial.
+  Overrides the core "npc-ship-header" partial via ShipCombat.registerPartialOverride.
+
+  Expected context (from NpcShipSheetMixin._prepareContext):
+    actor              — the Actor document
+    sys                — actor.system
+    hullPct            — hull percentage (0–100)
+    hullBarLabel       — localised hull bar label
+    sectors            — array of { id, abbr, label, shield, shieldMax, armour, armourBase }
+    shipClassifications — array of { value, label }
+--}}
+<div class="shipcombat-header shipcombat-ship-header shipcombat-npc-ship-header dnd5e-npc-ship-header">
+
+  {{!-- Portrait --}}
+  <img class="profile" data-action="editImage" src="{{actor.img}}"
+       data-edit="img" data-tooltip="{{actor.name}}" data-tooltip-direction="UP">
+
+  {{!-- Name + identity row --}}
+  <header class="sheet-header">
+    <div class="header-details">
+      <div class="details-row name">
+        <input type="text" name="name" value="{{actor.name}}"
+               placeholder="{{localize 'SHIPCOMBAT.NpcShip.ShipName'}}">
+      </div>
+      <div class="details-row">
+        <div class="detail-group">
+          <div class="input-group">
+            <select name="system.classification">
+              {{#each shipClassifications}}
+              <option value="{{this.value}}"
+                {{#if (eq ../sys.classification this.value)}}selected{{/if}}>
+                {{this.label}}
+              </option>
+              {{/each}}
+            </select>
+          </div>
+          <label>{{localize "SHIPCOMBAT.NpcShip.Classification"}}</label>
+        </div>
+        <div class="detail-group">
+          <div class="input-group">
+            <input type="text" name="system.model" value="{{sys.model}}"
+                   placeholder="{{localize 'SHIPCOMBAT.NpcShip.Model'}}">
+          </div>
+          <label>{{localize "SHIPCOMBAT.NpcShip.Model"}}</label>
+        </div>
+        <div class="detail-group">
+          <div class="input-group">
+            <input type="text" name="system.shipFaction" value="{{sys.shipFaction}}"
+                   placeholder="{{localize 'SHIPCOMBAT.NpcShip.Faction'}}">
+          </div>
+          <label>{{localize "SHIPCOMBAT.NpcShip.Faction"}}</label>
+        </div>
+        <div class="detail-group">
+          <div class="input-group">
+            <input type="text" name="system.details.cr" value="{{sys.details.cr}}"
+                   placeholder="{{localize 'DND5E.ChallengeRating'}}">
+          </div>
+          <label>{{localize "DND5E.ChallengeRating"}}</label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Stat table: AC / Initiative / Speed --}}
+  <table class="shipcombat-stat-table dnd5e-npc-stat-table">
+    <tr>
+      <td data-tooltip="{{localize 'DND5E.ArmorClass'}}" data-tooltip-direction="UP">AC</td>
+      <td data-tooltip="{{localize 'DND5E.Initiative'}}" data-tooltip-direction="UP">INIT</td>
+      <td data-tooltip="{{localize 'SHIPCOMBAT.NpcShip.BaseSpeed'}}" data-tooltip-direction="UP">SPD</td>
+      <td data-tooltip="{{localize 'SHIPCOMBAT.NpcShip.BaseManeuverability'}}" data-tooltip-direction="UP">MAN</td>
+      <td data-tooltip="{{localize 'SHIPCOMBAT.Component.AutoScanRange'}}" data-tooltip-direction="UP">OPT</td>
+      <td data-tooltip="{{localize 'SHIPCOMBAT.Component.BandSize'}}" data-tooltip-direction="UP">BND</td>
+      <td data-tooltip="{{localize 'SHIPCOMBAT.DND5E.Component.HitModifier'}}" data-tooltip-direction="UP">HIT</td>
+    </tr>
+    <tr>
+      <td><input type="number" name="system.attributes.ac.flat" value="{{sys.attributes.ac.flat}}" min="0"></td>
+      <td><input type="number" name="system.attributes.init.total" value="{{sys.attributes.init.total}}"></td>
+      <td><input type="number" name="system.movement.baseSpeed" value="{{sys.movement.baseSpeed}}" min="0"></td>
+      <td><input type="number" name="system.movement.baseManeuverability" value="{{sys.movement.baseManeuverability}}" min="0"></td>
+      <td><input type="number" name="system.autoScanRange" value="{{sys.autoScanRange}}" min="0"></td>
+      <td><input type="number" name="system.sensorBandSize" value="{{sys.sensorBandSize}}" min="0"></td>
+      <td><input type="number" name="system.sensorRating" value="{{sys.sensorRating}}" min="0"></td>
+    </tr>
+  </table>
+
+  {{!-- Per-sector armour: current | max --}}
+  <table class="shipcombat-npc-armour-sector-table">
+    <tr>
+      <td></td>
+      {{#each sectors}}
+      <td data-tooltip="{{label}}" data-tooltip-direction="UP">{{abbr}}</td>
+      {{/each}}
+    </tr>
+    <tr>
+      <td class="shipcombat-npc-arm-row-label"
+          data-tooltip="{{localize 'SHIPCOMBAT.Label.ArmourCurrentMax'}}"
+          data-tooltip-direction="LEFT">
+        {{localize "SHIPCOMBAT.Label.ArmourCurrentMax"}}
+      </td>
+      {{#each sectors}}
+      <td>
+        <span class="shipcombat-npc-armour-compound">
+          <input type="number" name="system.armour.{{id}}" value="{{armour}}"
+                 min="0" class="shipcombat-npc-arm-input">
+          <span class="shipcombat-as-sep">|</span>
+          <input type="number" name="system.armourBase.{{id}}" value="{{armourBase}}"
+                 min="0" class="shipcombat-npc-arm-input shipcombat-npc-arm-max">
+        </span>
+      </td>
+      {{/each}}
+    </tr>
+  </table>
+
+  {{!-- Hull / Internal Fire --}}
+  <div class="shipcombat-ship-attr-row">
+    <div class="shipcombat-ship-attr-box">
+      <div class="shipcombat-ship-attr-label">{{hullBarLabel}}</div>
+      <div class="shipcombat-ship-attr-fields">
+        <input type="number" name="system.hull.value" value="{{sys.hull.value}}" min="0">
+        <span class="shipcombat-hull-sep">/</span>
+        <input type="number" name="system.hull.max" value="{{sys.hull.max}}" min="0">
+      </div>
+    </div>
+    <div class="shipcombat-ship-attr-box">
+      <div class="shipcombat-ship-attr-label">{{localize "SHIPCOMBAT.Engineer.InternalFire"}}</div>
+      <div class="shipcombat-ship-attr-fields">
+        <input type="number" name="system.internalFire" value="{{sys.internalFire}}" min="0">
+      </div>
+    </div>
+  </div>
+
+</div>

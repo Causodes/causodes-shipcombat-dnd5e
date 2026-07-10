@@ -1,0 +1,83 @@
+{
+  "id": "causodes-shipcombat-dnd5e",
+  "title": "Causodes's Ship Combat (D&D 5e)",
+  "description": "D&D 5e integration for Causodes's Ship Combat (Core). Registers the ship actor types, system adapter, and CSS theming.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "authors": [
+    {
+      "name": "Causodes",
+      "flags": {}
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {}
+      }
+    ],
+    "requires": [
+      {
+        "id": "causodes-shipcombat-core",
+        "type": "module",
+        "manifest": "https://github.com/Causodes/causodes-shipcombat-core/releases/latest/download/module.json"
+      }
+    ]
+  },
+  "esmodules": [
+    "causodes-shipcombat-dnd5e.js"
+  ],
+  "styles": [
+    { "src": "styles/shared.css" },
+    { "src": "styles/header.css" },
+    { "src": "styles/overview.css" },
+    { "src": "styles/sidebar.css" },
+    { "src": "styles/captain.css" },
+    { "src": "styles/engineer.css" },
+    { "src": "styles/gunner.css" },
+    { "src": "styles/pilot.css" },
+    { "src": "styles/sensors.css" },
+    { "src": "styles/ordnance.css" },
+    { "src": "styles/npc.css" },
+    { "src": "styles/chat.css" }
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json",
+      "flags": {}
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "ship": {},
+      "npcShip": {},
+      "shipOrdnance": {}
+    },
+    "Item": {
+      "component": {}
+    }
+  },
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "css",
+        "hbs",
+        "json"
+      ]
+    }
+  },
+  "url": "https://github.com/Causodes/causodes-shipcombat-dnd5e",
+  "download": "https://github.com/Causodes/causodes-shipcombat-dnd5e/archive/refs/tags/v1.0.0.zip",
+  "manifest": "https://github.com/Causodes/causodes-shipcombat-dnd5e/releases/latest/download/module.json",
+  "readme": "https://github.com/Causodes/causodes-shipcombat-dnd5e/blob/main/README.md",
+  "changelog": "https://github.com/Causodes/causodes-shipcombat-dnd5e/blob/main/CHANGELOG.md",
+  "allowBugReporter": true
+}
