@@ -107,7 +107,7 @@ export function buildShipComponentSheet(ItemSheet5e) {
       `;
       form.addEventListener("submit", ev => {
         ev.preventDefault();
-        const data = new FormDataExtended(form).object;
+        const data = new foundry.applications.ux.FormDataExtended(form).object;
         this.#resolve?.(data);
         this.#resolve = null;
         this.close();

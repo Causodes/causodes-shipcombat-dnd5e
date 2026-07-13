@@ -170,3 +170,76 @@
   color: var(--color-text-primary);
   margin: 0;
 }
+
+/* ── Ship-combat popup windows ──────────────────────────────────────────────
+   Targeting, strike-craft, recovery, and battle-clarity windows share the
+   targeting-popup class. Force them onto the same active Foundry theme surface
+   used by the ram popup instead of core's ImpMal-oriented dark teal surface. */
+body .application.shipcombat-targeting-popup {
+  background: var(--background) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.shipcombat-targeting-popup {
+  --shipcombat-popup-surface: color-mix(in srgb, var(--color-text-primary) 6%, transparent);
+  --shipcombat-popup-surface-hover: color-mix(in srgb, var(--color-text-primary) 11%, transparent);
+  --shipcombat-popup-border: color-mix(in srgb, var(--color-text-primary) 18%, transparent);
+  --shipcombat-popup-success: #16864c;
+  --shipcombat-popup-warning: #aa6500;
+  --shipcombat-popup-danger: #c84b53;
+  --shipcombat-popup-info: #4e7d91;
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-header,
+.shipcombat-targeting-popup .shipcombat-tp-stat,
+.shipcombat-targeting-popup .shipcombat-tp-target,
+.shipcombat-targeting-popup .shipcombat-tp-overcharge-btn {
+  background: var(--shipcombat-popup-surface);
+  border-color: var(--shipcombat-popup-border);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-target:hover,
+.shipcombat-targeting-popup .shipcombat-tp-overcharge-btn:hover {
+  background: var(--shipcombat-popup-surface-hover);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-stat--cost,
+.shipcombat-targeting-popup .shipcombat-tp-armour-val,
+.shipcombat-targeting-popup .shipcombat-tp-zone--2,
+.shipcombat-targeting-popup .shipcombat-tp-acc--ranged {
+  color: var(--shipcombat-popup-warning);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-stat--bonus,
+.shipcombat-targeting-popup .shipcombat-tp-acc--boosted,
+.shipcombat-targeting-popup .shipcombat-tp-optimal-badge {
+  color: var(--shipcombat-popup-info);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-zone--1,
+.shipcombat-targeting-popup .shipcombat-tp-acc--auto,
+.shipcombat-targeting-popup .shipcombat-sc-attacked-badge,
+.shipcombat-targeting-popup .shipcombat-rc-recall-btn,
+.shipcombat-targeting-popup .shipcombat-rc-header-icon {
+  color: var(--shipcombat-popup-success);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-zone--3,
+.shipcombat-targeting-popup .shipcombat-tp-fire-btn {
+  color: var(--shipcombat-popup-danger);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-fire-btn {
+  background: color-mix(in srgb, var(--shipcombat-popup-danger) 12%, transparent);
+  border-color: color-mix(in srgb, var(--shipcombat-popup-danger) 50%, transparent);
+}
+.shipcombat-targeting-popup .shipcombat-tp-fire-btn:hover {
+  background: color-mix(in srgb, var(--shipcombat-popup-danger) 24%, transparent);
+}
+
+.shipcombat-targeting-popup .shipcombat-tp-fire-btn--no-lock {
+  color: var(--color-text-secondary);
+  background: var(--shipcombat-popup-surface);
+  border-color: var(--shipcombat-popup-border);
+  opacity: 0.55;
+}

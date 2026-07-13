@@ -1,1 +1,78 @@
 /* causodes-shipcombat-dnd5e — chat.css */
+
+/*
+ * Core's result cards were originally tuned for a dark chat log. These
+ * mid-luminance accents retain WCAG AA contrast against both white and black,
+ * so they also remain legible when a UI module darkens individual cards.
+ */
+.shipcombat-fire-result {
+  --shipcombat-chat-success: #16864c;
+  --shipcombat-chat-warning: #aa6500;
+  --shipcombat-chat-danger: #c84b53;
+  --shipcombat-chat-info: #4e7d91;
+}
+
+.shipcombat-fire-success,
+.shipcombat-fire-salvo-summary strong,
+.shipcombat-fire-guaranteed {
+  color: var(--shipcombat-chat-success);
+}
+
+.shipcombat-fire-failure,
+.shipcombat-shield-through,
+.shipcombat-fire-damage-header .shipcombat-dmg-total,
+.shipcombat-fire-rend,
+.shipcombat-fire-crit-entry,
+.shipcombat-fire-crit-header,
+.shipcombat-bda-failed-notice {
+  color: var(--shipcombat-chat-danger);
+}
+
+.shipcombat-fire-cost,
+.shipcombat-shield-bypass,
+.shipcombat-fire-ap,
+.shipcombat-dmg-flat {
+  color: var(--shipcombat-chat-warning);
+}
+
+.shipcombat-fire-details {
+  opacity: 1;
+}
+
+.shipcombat-fire-shields i,
+.shipcombat-bda-pending .shipcombat-bda-icon-wrap,
+.shipcombat-bda-pending-msg,
+.shipcombat-bda-correction-result > i,
+.shipcombat-bda-correction-label,
+.shipcombat-bda-launch-btn {
+  color: var(--shipcombat-chat-info);
+}
+
+.shipcombat-fire-auto,
+.shipcombat-die-pip {
+  color: var(--shipcombat-chat-success);
+  background: color-mix(in srgb, var(--shipcombat-chat-success) 12%, transparent);
+  border-color: color-mix(in srgb, var(--shipcombat-chat-success) 45%, transparent);
+}
+
+/* Replace light-on-dark fixed colours with the active chat theme's text. */
+.shipcombat-fire-armour-blocked,
+.shipcombat-fire-crit-detail,
+.shipcombat-bda-weapon-name {
+  color: inherit;
+}
+.shipcombat-fire-armour-blocked { opacity: 0.7; }
+.shipcombat-fire-armour-blocked i { color: currentColor; }
+.shipcombat-fire-crit-note,
+.shipcombat-bda-fire-mode {
+  color: inherit;
+  opacity: 0.65;
+}
+
+.shipcombat-bda-weapon-summary {
+  border-color: color-mix(in srgb, currentColor 18%, transparent);
+}
+.shipcombat-bda-fire-result-divider::before,
+.shipcombat-bda-fire-result-divider::after {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+}

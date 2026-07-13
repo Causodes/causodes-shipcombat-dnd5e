@@ -383,6 +383,9 @@ export class Dnd5eAdapter extends SystemAdapter {
     return Math.max(this.getModifierStepSize(), sensorRating ?? 0);
   }
 
+  /** D&D 5e weapons can reach 20 bands beyond effective range, at −1 per band. */
+  getMaxDecayBands(_sensorRating) { return 20; }
+
   /**
    * 5e SL ladder for ship-action skill checks — bands of 5, unbounded.
    *

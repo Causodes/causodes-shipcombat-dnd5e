@@ -1,6 +1,6 @@
 # Causodes's Ship Combat (D&D 5e)
 
-![](https://github.com/user-attachments/assets/1835301a-cb39-44c4-afbf-5318cdd488f2)
+![![Watch the Video Showcase!](https://github.com/user-attachments/assets/1835301a-cb39-44c4-afbf-5318cdd488f2)](https://github.com/user-attachments/assets/834ba738-a547-4032-935c-dde5c44d3c8c)
 
 A FoundryVTT module for **D&D 5e** that adds a full ship combat system. Up to six players each claim a named bridge station and execute their role's mechanics from a dedicated tab on the shared starship sheet. The crew size is adjustable; roles collapse and merge as headcount drops. All players take their turns simultaneously on the player ship's turn in the combat tracker.
 
