@@ -4,7 +4,7 @@
   "description": "D&D 5e integration for Causodes's Ship Combat (Core). Registers the ship actor types, system adapter, and CSS theming.",
   "version": "1.0.1",
   "compatibility": {
-    "minimum": "14",
+    "minimum": "13",
     "verified": "14.364",
     "maximum": "14"
   },

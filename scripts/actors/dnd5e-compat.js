@@ -23,6 +23,23 @@ function getFormulaField() {
   return globalThis.dnd5e?.dataModels?.fields?.FormulaField ?? foundry.data.fields.StringField;
 }
 
+/**
+ * Add fields to an existing SchemaField across Foundry V13 and V14.
+ *
+ * V14 exposes the public SchemaField#extendFields API. V13 has the same
+ * public `fields` collection and protected field initializer, but does not
+ * expose extendFields. Use V14's API when available and reproduce its merge
+ * behavior on V13 so the added fields are validated before being attached.
+ */
+export function extendSchemaField(schemaField, fields) {
+  if (typeof schemaField.extendFields === "function") {
+    schemaField.extendFields(fields);
+    return;
+  }
+
+  Object.assign(schemaField.fields, schemaField._initialize(fields));
+}
+
 /** Mirrors dnd5e's internal `makeAttackBonuses()` (CreatureTemplate bonuses schema). */
 function makeAttackBonuses() {
   const FormulaField = getFormulaField();
