@@ -126,7 +126,7 @@ async function _npcReduceHeat() {
   });
 }
 
-export function buildNpcShipSheet(NPCActorSheet) {
+export function buildNpcShipSheet(NPCActorSheet, HitPointsConfigApp, ArmorClassConfigApp) {
   const { NpcShipSheetMixin } = globalThis.ShipCombat._api;
 
   class NpcShipSheet extends NpcShipSheetMixin(NPCActorSheet) {
@@ -344,6 +344,25 @@ export function buildNpcShipSheet(NPCActorSheet) {
 
     /** @override — ships have no spellbook part. */
     _renderSpellbook() {}
+
+    /* ── Configuration popups ─────────────────────────────────── */
+
+    /** Route NPC HP to hull and expose NPC AC as a flat authored value. */
+    _showConfiguration(event, target) {
+      if (target.dataset.config === "hitPoints") {
+        if (HitPointsConfigApp) {
+          this._renderChild(new HitPointsConfigApp({ document: this.actor }));
+        }
+        return false;
+      }
+      if (target.dataset.config === "armorClass") {
+        if (ArmorClassConfigApp) {
+          this._renderChild(new ArmorClassConfigApp({ document: this.actor }));
+        }
+        return false;
+      }
+      return super._showConfiguration?.(event, target);
+    }
 
   }
 

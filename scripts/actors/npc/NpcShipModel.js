@@ -16,9 +16,8 @@
 import {
   dnd5eShipStubSchema,
   dnd5eAttributeStubFields,
-  extendSchemaField,
   mirrorHullToHp,
-  computeComponentAC,
+  prepareFlatAC,
   prepareTravelSpeeds,
 } from "../dnd5e-compat.js";
 
@@ -39,7 +38,7 @@ class _Base extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     this.computeDerived();
     mirrorHullToHp(this);
-    computeComponentAC(this);
+    prepareFlatAC(this);
     prepareTravelSpeeds(this);
   }
 }
@@ -50,10 +49,10 @@ export class NpcShipModel extends NpcShipSchemaMixin(_Base) {
     const schema = super.defineSchema();
     // NpcShipSchemaMixin overwrote _Base's attributes with piloting/tech/gunnery;
     // extend its SchemaField with the dnd5e stubs (hp, ac, init, spell,
-    // concentration, travel, price, capacity) so both coexist. Keep the
-    // existing SchemaField and extend it through the V13/V14 compatibility
-    // helper because the mixin's sub-fields are already bound to it.
-    extendSchemaField(schema.attributes, dnd5eAttributeStubFields());
+    // concentration, travel, price, capacity) so both coexist.  extendFields
+    // is required here — the mixin's sub-fields are already bound to their
+    // SchemaField and may not be spread into a new one.
+    schema.attributes.extendFields(dnd5eAttributeStubFields());
     return schema;
   }
 }

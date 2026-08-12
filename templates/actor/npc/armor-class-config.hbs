@@ -1,0 +1,23 @@
+{{!-- Flat, manually configured Armor Class for NPC ships. --}}
+<section class="flexcol">
+    <div class="final-value">{{ dnd5e-numberFormat value }}</div>
+
+    <fieldset class="card">
+        <legend>{{ localize "DND5E.ArmorClassFormula" }}</legend>
+
+        <div class="form-group">
+            <label>{{ localize "SHIPCOMBAT.DND5E.AC.Calculation" }}</label>
+            <div class="form-fields">
+                <input type="text" value="{{ localize 'DND5E.Flat' }}" disabled>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>{{ localize "DND5E.ArmorClassFlat" }}</label>
+            <div class="form-fields">
+                <input type="text" name="system.attributes.ac.flat" data-dtype="Number" value="{{ value }}"
+                       inputmode="numeric" pattern="^[+=\-]?\d*">
+            </div>
+        </div>
+    </fieldset>
+</section>

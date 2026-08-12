@@ -23,23 +23,6 @@ function getFormulaField() {
   return globalThis.dnd5e?.dataModels?.fields?.FormulaField ?? foundry.data.fields.StringField;
 }
 
-/**
- * Add fields to an existing SchemaField across Foundry V13 and V14.
- *
- * V14 exposes the public SchemaField#extendFields API. V13 has the same
- * public `fields` collection and protected field initializer, but does not
- * expose extendFields. Use V14's API when available and reproduce its merge
- * behavior on V13 so the added fields are validated before being attached.
- */
-export function extendSchemaField(schemaField, fields) {
-  if (typeof schemaField.extendFields === "function") {
-    schemaField.extendFields(fields);
-    return;
-  }
-
-  Object.assign(schemaField.fields, schemaField._initialize(fields));
-}
-
 /** Mirrors dnd5e's internal `makeAttackBonuses()` (CreatureTemplate bonuses schema). */
 function makeAttackBonuses() {
   const FormulaField = getFormulaField();
@@ -73,8 +56,9 @@ export function dnd5eAttributeStubFields() {
       // Foundry V14+.  Falls back to StringField if dnd5e is unavailable.
       formula: new (getFormulaField())({ initial: "", label: "DND5E.HPFormula" }),
     }),
-    // AC — computed from installed armour + engine components (ships) or
-    // mirrored from system.armorClass (ordnance).
+    // AC — computed from installed components for player ships, stored as a
+    // flat authored value for NPC ships, or mirrored from system.armorClass
+    // for ordnance.
     // calc is always "flat" for ships; value mirrors flat for display.
     // The native ArmorClassConfig needs calc/formula/value to render
     // without NaN or a broken formula section.
@@ -304,8 +288,8 @@ export function mirrorHullToHp(model) {
 
 /**
  * Sum the AC contribution of every equipped armour and engine component into
- * attributes.ac. Used by the ship and npcShip models (ordnance mirrors
- * system.armorClass instead).
+ * attributes.ac. Used by the player-ship model; NPC ships use prepareFlatAC
+ * and ordnance mirrors system.armorClass instead.
  */
 export function computeComponentAC(model) {
   const acSum = (model.parent?.items ?? []).reduce((sum, item) => {
@@ -322,6 +306,19 @@ export function computeComponentAC(model) {
   }, 0);
   model.attributes.ac.flat  = acSum;
   model.attributes.ac.value = acSum;
+}
+
+/**
+ * Mirror the stored flat AC into the derived display value for NPC ships.
+ *
+ * Unlike player ships, NPC AC is authored directly by the GM and must not be
+ * recomputed from installed components. The dnd5e sheet renders `ac.value`,
+ * while its flat-AC configuration field persists at `ac.flat`.
+ */
+export function prepareFlatAC(model) {
+  const ac = Number(model.attributes?.ac?.flat);
+  model.attributes.ac.calc  = "flat";
+  model.attributes.ac.value = Number.isFinite(ac) ? ac : 0;
 }
 
 /**

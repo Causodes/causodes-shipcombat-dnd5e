@@ -42,6 +42,7 @@ import { ShipOrdnanceModel }   from "./scripts/actors/ordnance/ShipOrdnanceModel
 import { ShipComponentModel }  from "./scripts/items/ShipComponentModel.js";
 import { buildPlayerShipSheet } from "./scripts/actors/starship/PlayerShipSheet.js";
 import { buildNpcShipSheet }   from "./scripts/actors/npc/NpcShipSheet.js";
+import { NpcShipArmorClassConfig } from "./scripts/actors/npc/NpcShipArmorClassConfig.js";
 import { buildOrdnanceSheet }  from "./scripts/actors/ordnance/OrdnanceSheet.js";
 import { buildShipComponentSheet } from "./scripts/items/ShipComponentSheet.js";
 import { StarshipClassificationConfig } from "./scripts/actors/starship/StarshipClassificationConfig.js";
@@ -251,8 +252,19 @@ Hooks.once("init", () => {
 
   StarshipSubtypePrompt = buildStarshipSubtypePrompt();
 
-  const PlayerShipSheet = buildPlayerShipSheet(NPCActorSheet, StarshipClassificationConfig.build(), StarshipMovementConfig.build(), StarshipHitPointsConfig.build(), StarshipArmorClassConfig.build());
-  const NpcShipSheet    = buildNpcShipSheet(NPCActorSheet);
+  const HitPointsConfigApp = StarshipHitPointsConfig.build();
+  const PlayerShipSheet = buildPlayerShipSheet(
+    NPCActorSheet,
+    StarshipClassificationConfig.build(),
+    StarshipMovementConfig.build(),
+    HitPointsConfigApp,
+    StarshipArmorClassConfig.build(),
+  );
+  const NpcShipSheet = buildNpcShipSheet(
+    NPCActorSheet,
+    HitPointsConfigApp,
+    NpcShipArmorClassConfig.build(),
+  );
   const OrdnanceSheet   = buildOrdnanceSheet(NPCActorSheet, OrdnanceArmorClassConfig.build());
   const ShipComponentSheet = buildShipComponentSheet(ItemSheet5e);
 
