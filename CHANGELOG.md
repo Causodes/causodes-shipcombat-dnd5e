@@ -1,3 +1,7 @@
+## 1.0.4
+- Validate and upload `module.json` directly from the release tag so published manifest assets cannot advertise an older module version or download URL
+- Bump release version to fix mismatched module.json and enforce a fresh pull from FoundryVTT package manager
+
 ## v1.0.3
 - Fix NPC Ship Hit Point edits being discarded: the D&D5e HP configuration popup now writes current and maximum HP to the ship's authoritative hull values
 - Make NPC Ship Armor Class a persistent, manually configured flat value; equipped armor and engine components no longer overwrite NPC AC
