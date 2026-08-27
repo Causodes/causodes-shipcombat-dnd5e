@@ -66,6 +66,27 @@ const COMPONENT_TYPE = `${MODULE_ID}.component`;
 const LEGACY_STARSHIP_TYPE = `${MODULE_ID}.starship`;
 const SHIP_ICON = "systems/dnd5e/icons/svg/damage/radiant.svg";
 
+function getPrototypeTokenDefaults(type, img) {
+  if (type === NPC_SHIP_TYPE) {
+    return {
+      "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.HOSTILE,
+      "prototypeToken.lockRotation": false,
+      "prototypeToken.actorLink": true,
+      "prototypeToken.hidden": true,
+    };
+  }
+  if (type === ORDNANCE_TYPE) {
+    return {
+      "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.NEUTRAL,
+      "prototypeToken.lockRotation": false,
+      "prototypeToken.actorLink": true,
+      "prototypeToken.hidden": false,
+      "prototypeToken.texture.src": img,
+    };
+  }
+  return {};
+}
+
 /**
  * Build the StarshipSubtypePrompt dialog class — the follow-up prompt shown
  * after the user picks "Starship" in the Create Actor dialog.
@@ -370,10 +391,13 @@ Hooks.once("init", () => {
       if (newType !== created.type) {
         // V14 requires the system field to be a ForcedReplacement whenever the
         // type changes.  The actor is brand-new, so replacing with {} simply
-        // takes the new type's schema defaults.
+        // takes the new type's schema defaults. Retyping happens after creation,
+        // so also apply the token defaults Core's preCreateActor hook would have
+        // assigned if this subtype had been created directly.
         await created.update({
           type:   newType,
           system: foundry.data.operators.ForcedReplacement.create({}),
+          ...getPrototypeTokenDefaults(newType, created.img),
         });
         actor = game.actors?.get(created.id) ?? created;
       }
@@ -411,7 +435,7 @@ Hooks.once("init", () => {
       else otherIds.push(id);
     }
 
-    const { SystemAdapter } = globalThis.ShipCombat._api;
+    const { SystemAdapter, recordPlayerShipInitiative } = globalThis.ShipCombat._api;
     const adapter = SystemAdapter.current;
 
     // Player ships: d20 + the captain's initiative skill modifier
@@ -441,7 +465,12 @@ Hooks.once("init", () => {
         flavor:  game.i18n.localize("SHIPCOMBAT.Captain.RollInitiativeBtn"),
         speaker: ChatMessage.getSpeaker({ actor: crewActor }),
       });
-      await this.setInitiative(id, adapter.toCombatantInitiative(total, ship));
+      await recordPlayerShipInitiative({
+        shipActor: ship,
+        rawTotal: total,
+        combat: this,
+        combatantId: id,
+      });
     }
 
     // NPC ships: d20 + PIL modifier from the ship's own attributes.
@@ -558,6 +587,7 @@ Hooks.once("ready", async () => {
       await actor.update({
         type:   newType,
         system: foundry.data.operators.ForcedReplacement.create(system),
+        ...getPrototypeTokenDefaults(newType, actor.img),
       });
 
       // Clear the old mode-switch machinery's sheet-class flag — the split

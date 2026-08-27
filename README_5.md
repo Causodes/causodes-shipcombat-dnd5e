@@ -25,13 +25,13 @@ Roll Persuasion once per round. Allocate the Points to:
 
 | Track | Effect per Point |
 |-------|------------------|
-| Resolve | +1 damage control action this round |
+| Resolve | +1 mulligan this round |
 | Efficiency | –1 crew cost per ordnance action (minimum 2) |
 | Expedience | –1 round duration per ordnance action (minimum 1) |
 
 ### Damage Control
 
-Each repair action steps one ship condition down one tier, costing 10% of maximum Auxiliary Power. Base allotment is 2 per round plus Resolve Points.
+Each repair action steps one ship condition down one tier, costing 10% of maximum Auxiliary Power. The allotment is always 2 per round.
 
 ### Main Actions
 
@@ -58,12 +58,12 @@ The Core Actions grid shows captain core actions followed by ordnance core actio
 
 | Action | Effect |
 |--------|--------|
-| Battle Clarity | All weapons targeting a nominated enemy gain +2 to hit and pierce 2 shields this round |
+| Priority Target | All weapons targeting a nominated enemy gain +2 to hit and pierce 2 shields this round |
 | Emergency Protocols | Discard entire hand; clear all Low-tier ship conditions |
 | Iron Command | Discard entire hand; step every Medium and High condition down one tier |
-| Emergency Salvage | Retrieve any one order from the discard pile into hand |
+| Emergency Salvage | Preview and recover a discarded order above the hand limit with the Salvaged tag; recycle every other discard into the draw pile |
 | Command Override | Immediately promote a queued pending stance into the active stance |
-| Dead Reckoning | View and reorder the top 12 cards in the draw pile; blocks the mulligan this round |
+| Dead Reckoning | Reorder the top 12 draw-pile orders |
 | Combat Recovery Doctrine | Step destroyed, partial, or recovering strike craft airframes forward through repair stages |
 | Shock Loading Rotation | Instantly complete one active crew commitment; effect applied immediately |
 | Deck Conscription | +25% of max manpower as temporary crew this round, OR restore 10% of permanently lost crew |
@@ -74,7 +74,11 @@ The Deployed Strike Craft panel lists all strike craft deployed by the Captain. 
 
 ### Standing Orders Deck
 
-21-card deck shuffled at the start of combat. Draw 3 cards per round, hand cap 6. One free redraw per round (swap one card for a fresh draw). Spending two repair actions unlocks a full mulligan.
+The 21-card deck is shuffled at combat start. The starting hand limit is 3. At the start of each round, unplayed orders are retained up to that limit and enough orders are drawn to refill the hand. Playing an order removes that slot for the rest of the current round.
+
+The Captain has 1 mulligan each round, plus 1 per Point allocated to Resolve. A mulligan discards one selected order and immediately draws a replacement into the same slot; the same slot can be mulliganed repeatedly while uses remain. The first mulligan locks the shared Resolve/Efficiency/Expedience allocation for the round. The header projects the refill as `(current cards/current limit) → (next cards/next limit)`.
+
+If a non-empty draw pile contains too few orders to refill the hand, it is exhausted and that round begins below the limit. If a round would draw zero because the draw pile starts empty, the entire discard pile is shuffled into the draw pile before drawing normally. A Salvaged order goes to the bottom of the draw pile instead of discard whenever it leaves hand.
 
 Cards fall into four categories:
 
@@ -96,7 +100,7 @@ Allocate available flux across the four sectors (Bow, Stern, Port, Starboard) ea
 
 ### Core Distribution
 
-Stage cores individually against each role (including the core bank for Auxiliary Power conversion the following round), then dispatch them all at once. Receiving roles spend their core to unlock their Power Core action. Surplus cores convert to AP at end of round.
+Stage cores individually for crew stations, void shields, or Auxiliary Power conversion, then dispatch them all at once. A station Core joins the receiving operator's shared pool and can unlock that operator's Power Core actions. Cores committed to Auxiliary Power convert at the start of the next round.
 
 *Overclock*: roll Arcana against the reactor's Overclock DC (the component's base DC, scaling up to +10 as the heat track fills) and gain +1 heat; on success gain one bonus Power Core for this round.
 
@@ -193,7 +197,7 @@ After the Gunner fires, the Sensors Officer may perform one BDA correction:
 
 | Action | Effect |
 |--------|--------|
-| Sensor Disruption | Target suffers –10 to all rolls (including accuracy) for 1 round |
+| Sensor Disruption | Target suffers a penalty equal to your sensors' Hit Modifier (minimum −1) to all rolls, including weapon accuracy, for 1 round |
 | Sensor Overcharge | Target is Sensor Disrupted for 2 rounds: its weapons can only fire within their auto-scan range |
 | Designate Torpedo | Freeze a hostile torpedo's helming for 1 round, or double a friendly torpedo's speed this turn |
 

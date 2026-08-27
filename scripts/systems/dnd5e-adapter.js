@@ -28,6 +28,7 @@ export class Dnd5eAdapter extends SystemAdapter {
   get moduleId()       { return "causodes-shipcombat-dnd5e"; }
   get systemName()     { return "dnd5e"; }
   get englishVariant() { return "american"; }
+  get allocationUnitTerms() { return { singular: "point", plural: "points" }; }
 
   /**
    * dnd5e uses the same three ship actor types as the other companions
@@ -374,6 +375,9 @@ export class Dnd5eAdapter extends SystemAdapter {
    */
   getHitBonusStep() { return 2; }
 
+  /** Each allocated Gunnery Point grants a whole +1 accuracy modifier. */
+  getAccuracyAllocationStep() { return 1; }
+
   /**
    * Sensor Disruption penalty: the disruptor's sensor Hit Modifier (a flat
    * d20 bonus in dnd5e), with a minimum of one range band (−1).
@@ -550,7 +554,7 @@ export class Dnd5eAdapter extends SystemAdapter {
         const low = dc + (sl - 1) * 5;
         range = `${low}–${low + 4}`;
       }
-      const label = sl === 1 ? "1 Point" : `${sl} Points`;
+      const label = `${sl} ${this.formatAllocationUnit(sl, { capitalize: true })}`;
       tiers.push({ range, sl, label, active: sl === baseSL });
     }
 
@@ -561,7 +565,7 @@ export class Dnd5eAdapter extends SystemAdapter {
     ).join("");
 
     let natNote = "";
-    if      (natBonus ===  1) natNote = `<div class="sc-nat-bonus sc-nat-20">Natural 20: +1 Point</div>`;
+    if      (natBonus ===  1) natNote = `<div class="sc-nat-bonus sc-nat-20">Natural 20: +1 ${this.formatAllocationUnit(1, { capitalize: true })}</div>`;
     else if (natBonus === -1) natNote = `<div class="sc-nat-bonus sc-nat-1">Natural 1: Automatic Failure</div>`;
 
     const roleAttr = roleSkill ? ` data-sc-role-skill="${roleSkill}"` : "";
@@ -570,7 +574,7 @@ export class Dnd5eAdapter extends SystemAdapter {
     <thead><tr><th>Roll</th><th>Result</th></tr></thead>
     <tbody>${rows}</tbody>
   </table>${natNote}
-  <div class="sc-points-granted">→ Points Granted: <strong>${finalSL}</strong></div>
+  <div class="sc-points-granted">→ ${this.formatAllocationUnit(finalSL, { capitalize: true })} Granted: <strong>${finalSL}</strong></div>
 </div>`;
   }
 

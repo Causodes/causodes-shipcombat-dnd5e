@@ -1,4 +1,13 @@
-## 1.0.4
+## v1.1.0
+- Apply hostile and hidden token defaults when the Starship creation prompt or legacy migration retypes a player ship as an NPC ship, preventing enemy ships from appearing as untargetable friendly Lock 4 contacts
+- Update crew-layout guides for shared receiving-operator Power Core pools and separate shield/Auxiliary Power commitments
+- Define D&D5e's singular `point` and plural `points` allocation terminology once in the system adapter and consume it across localized and generated UI copy
+- Convert legacy percentile fire-mode modifiers to d20 bonuses, use +1 per allocated Gunnery Point, and remove percentile-only accuracy copy
+- Apply Captain initiative allocation as a reversible combat-tracker bonus, replacing the previous Ship Combat bonus at each round transition without carrying a rolled baseline between combats
+- Replace remaining inherited and dynamically generated “SL” descriptions with “points” terminology
+- Update Resolve copy for the base mulligan plus per-point bonus; the shared Core Captain layout no longer repeats Active Standing Orders below the tab
+
+## v1.0.4
 - Validate and upload `module.json` directly from the release tag so published manifest assets cannot advertise an older module version or download URL
 - Bump release version to fix mismatched module.json and enforce a fresh pull from FoundryVTT package manager
 
