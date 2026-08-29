@@ -71,7 +71,7 @@ function getPrototypeTokenDefaults(type, img) {
     return {
       "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.HOSTILE,
       "prototypeToken.lockRotation": false,
-      "prototypeToken.actorLink": true,
+      "prototypeToken.actorLink": false,
       "prototypeToken.hidden": true,
     };
   }
@@ -79,7 +79,7 @@ function getPrototypeTokenDefaults(type, img) {
     return {
       "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.NEUTRAL,
       "prototypeToken.lockRotation": false,
-      "prototypeToken.actorLink": true,
+      "prototypeToken.actorLink": false,
       "prototypeToken.hidden": false,
       "prototypeToken.texture.src": img,
     };

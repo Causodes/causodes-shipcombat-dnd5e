@@ -2,10 +2,10 @@
   "id": "causodes-shipcombat-dnd5e",
   "title": "Causodes's Ship Combat (D&D 5e)",
   "description": "D&D 5e integration for Causodes's Ship Combat (Core). Registers the ship actor types, system adapter, and CSS theming.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "compatibility": {
-    "minimum": "14",
-    "verified": "14.364",
+    "minimum": "13",
+    "verified": "14.367",
     "maximum": "14"
   },
   "authors": [
@@ -100,7 +100,7 @@
     }
   },
   "url": "https://github.com/Causodes/causodes-shipcombat-dnd5e",
-  "download": "https://github.com/Causodes/causodes-shipcombat-dnd5e/archive/refs/tags/v1.1.0.zip",
+  "download": "https://github.com/Causodes/causodes-shipcombat-dnd5e/archive/refs/tags/v1.1.1.zip",
   "manifest": "https://github.com/Causodes/causodes-shipcombat-dnd5e/releases/latest/download/module.json",
   "readme": "https://github.com/Causodes/causodes-shipcombat-dnd5e/blob/main/README.md",
   "changelog": "https://github.com/Causodes/causodes-shipcombat-dnd5e/blob/main/CHANGELOG.md",

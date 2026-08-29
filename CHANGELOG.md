@@ -1,3 +1,8 @@
+## v1.1.1
+- Default NPC and Ordnance actors to unlinked tokens
+- Bump verified version to 14.367
+- Restore minimum verified version to v13
+
 ## v1.1.0
 - Apply hostile and hidden token defaults when the Starship creation prompt or legacy migration retypes a player ship as an NPC ship, preventing enemy ships from appearing as untargetable friendly Lock 4 contacts
 - Update crew-layout guides for shared receiving-operator Power Core pools and separate shield/Auxiliary Power commitments
