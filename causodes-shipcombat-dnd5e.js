@@ -35,21 +35,54 @@
  *   Hooks.once("ready") → one-time migration of legacy "starship" actors
  */
 
-import { Dnd5eAdapter }        from "./scripts/systems/dnd5e-adapter.js";
-import { ShipModel }           from "./scripts/actors/starship/ShipModel.js";
-import { NpcShipModel }        from "./scripts/actors/npc/NpcShipModel.js";
-import { ShipOrdnanceModel }   from "./scripts/actors/ordnance/ShipOrdnanceModel.js";
-import { ShipComponentModel }  from "./scripts/items/ShipComponentModel.js";
-import { buildPlayerShipSheet } from "./scripts/actors/starship/PlayerShipSheet.js";
-import { buildNpcShipSheet }   from "./scripts/actors/npc/NpcShipSheet.js";
-import { NpcShipArmorClassConfig } from "./scripts/actors/npc/NpcShipArmorClassConfig.js";
-import { buildOrdnanceSheet }  from "./scripts/actors/ordnance/OrdnanceSheet.js";
-import { buildShipComponentSheet } from "./scripts/items/ShipComponentSheet.js";
-import { StarshipClassificationConfig } from "./scripts/actors/starship/StarshipClassificationConfig.js";
-import { StarshipMovementConfig }       from "./scripts/actors/starship/StarshipMovementConfig.js";
-import { StarshipHitPointsConfig }      from "./scripts/actors/starship/StarshipHitPointsConfig.js";
-import { StarshipArmorClassConfig }     from "./scripts/actors/starship/StarshipArmorClassConfig.js";
-import { OrdnanceArmorClassConfig }     from "./scripts/actors/ordnance/OrdnanceArmorClassConfig.js";
+const ShipCombat = await new Promise((resolve, reject) => {
+  if (globalThis.ShipCombat?._api) {
+    resolve(globalThis.ShipCombat);
+    return;
+  }
+
+  const timeout = setTimeout(() => {
+    reject(new Error("causodes-shipcombat-dnd5e | Core API did not become available during module startup."));
+  }, 10_000);
+  Hooks.once("shipCombatApiReady", api => {
+    clearTimeout(timeout);
+    resolve(api);
+  });
+});
+
+const [
+  { Dnd5eAdapter },
+  { ShipModel },
+  { NpcShipModel },
+  { ShipOrdnanceModel },
+  { ShipComponentModel },
+  { buildPlayerShipSheet },
+  { buildNpcShipSheet },
+  { NpcShipArmorClassConfig },
+  { buildOrdnanceSheet },
+  { buildShipComponentSheet },
+  { StarshipClassificationConfig },
+  { StarshipMovementConfig },
+  { StarshipHitPointsConfig },
+  { StarshipArmorClassConfig },
+  { OrdnanceArmorClassConfig },
+] = await Promise.all([
+  import("./scripts/systems/dnd5e-adapter.js"),
+  import("./scripts/actors/starship/ShipModel.js"),
+  import("./scripts/actors/npc/NpcShipModel.js"),
+  import("./scripts/actors/ordnance/ShipOrdnanceModel.js"),
+  import("./scripts/items/ShipComponentModel.js"),
+  import("./scripts/actors/starship/PlayerShipSheet.js"),
+  import("./scripts/actors/npc/NpcShipSheet.js"),
+  import("./scripts/actors/npc/NpcShipArmorClassConfig.js"),
+  import("./scripts/actors/ordnance/OrdnanceSheet.js"),
+  import("./scripts/items/ShipComponentSheet.js"),
+  import("./scripts/actors/starship/StarshipClassificationConfig.js"),
+  import("./scripts/actors/starship/StarshipMovementConfig.js"),
+  import("./scripts/actors/starship/StarshipHitPointsConfig.js"),
+  import("./scripts/actors/starship/StarshipArmorClassConfig.js"),
+  import("./scripts/actors/ordnance/OrdnanceArmorClassConfig.js"),
+]);
 
 // ── Configure core engine ───────────────────────────────────────────────────
 // MUST be called at module-evaluation time, before the "init" hook fires.

@@ -17,12 +17,6 @@
     "Action": {
       "GunnerOverchargedDesc": "Full heavy fire. Spend {{SHIPCOMBAT.Term.AllocationUnits}} to inflict Critical Effects on enemy subsystems."
     },
-    "Engineer": {
-      "ManageHeatDesc": "Spend auxiliary power and roll Engineering to perform cooling procedures. Reduce heat by power spent + {{SHIPCOMBAT.Term.AllocationUnits}} (minimum 1).",
-      "SuppressFireDesc": "Spend auxiliary power and roll Engineering to suppress fire. Reduce fire by power spent + {{SHIPCOMBAT.Term.AllocationUnits}} (minimum 1).",
-      "HullRepairDesc": "Spend auxiliary power and roll Engineering to restore hull integrity. Costs +1 heat. Hull restored = power spent + {{SHIPCOMBAT.Term.AllocationUnits}}. Cannot repair during internal fire.",
-      "PlasmaForRepairHint": "Spend up to {max} auxiliary power. Each unit restores 1 hull plus the allocated {{SHIPCOMBAT.Term.AllocationUnits}}."
-    },
     "Gunner": {
       "OrdnanceSL": "Gunnery {{SHIPCOMBAT.Term.AllocationUnitsTitle}}",
       "OrdnanceSLTooltip": "Roll Gunnery to generate {{SHIPCOMBAT.Term.AllocationUnits}} for Accuracy, Penetration, and Firepower allocation."

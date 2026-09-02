@@ -1,3 +1,6 @@
+## v1.1.2
+- Wait for the Core API before evaluating D&D5e models and adapters, preventing startup races that leave module document subtypes unregistered
+
 ## v1.1.1
 - Default NPC and Ordnance actors to unlinked tokens
 - Bump verified version to 14.367
