@@ -1,3 +1,7 @@
+## v1.2.0
+- Route D&D5e ship requests through Core's actor-bound request factory and require Core 2.5.0+
+- Include the initiating ship in D&D5e Full Combat Reset requests
+
 ## v1.1.2
 - Wait for the Core API before evaluating D&D5e models and adapters, preventing startup races that leave module document subtypes unregistered
 

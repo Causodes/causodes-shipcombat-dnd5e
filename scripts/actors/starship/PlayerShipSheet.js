@@ -13,7 +13,8 @@
  *   - Navigation: sidebar-tabs.hbs → right-side icon tabs (matches NPC sheet)
  */
 
-const { ShipSheetV2Mixin, SHIP_PARTS, SHIP_TABS, emitToGM } = globalThis.ShipCombat._api;
+const { ShipSheetV2Mixin, SHIP_PARTS, SHIP_TABS, createActionRequester } = globalThis.ShipCombat._api;
+const requestGM = createActionRequester(context => context.actor);
 
 const CORE_MODULE_ID  = "causodes-shipcombat-core";
 const DND5E_MODULE_ID = "causodes-shipcombat-dnd5e";
@@ -86,7 +87,7 @@ export function buildPlayerShipSheet(NPCActorSheet, ClassificationConfigApp, Mov
               window:  { title: game.i18n.localize("SHIPCOMBAT.Dialog.FullReset") },
               content: `<p>${game.i18n.localize("SHIPCOMBAT.Dialog.FullResetBody")}</p>`,
             });
-            if (ok) emitToGM("fullReset", {});
+            if (ok) requestGM(this, "fullReset");
           },
         },
       },
