@@ -1,3 +1,8 @@
+## v1.2.1
+- Require Core 2.5.1 for corrected player and NPC ordnance lifecycle behavior
+- Publish an allowlisted runtime-only module archive without repository development files
+- Snapshot-test legacy player, NPC, and ordnance actor migration through one shared transformation
+
 ## v1.2.0
 - Route D&D5e ship requests through Core's actor-bound request factory and require Core 2.5.0+
 - Include the initiating ship in D&D5e Full Combat Reset requests

@@ -35,6 +35,8 @@
  *   Hooks.once("ready") → one-time migration of legacy "starship" actors
  */
 
+import { buildLegacyStarshipMigration } from "./scripts/migrations.js";
+
 const ShipCombat = await new Promise((resolve, reject) => {
   if (globalThis.ShipCombat?._api) {
     resolve(globalThis.ShipCombat);
@@ -572,47 +574,19 @@ Hooks.once("ready", async () => {
   }
   if (!legacy.length) return;
 
-  const MODE_TO_TYPE = {
-    player:   SHIP_TYPE,
-    npc:      NPC_SHIP_TYPE,
-    ordnance: ORDNANCE_TYPE,
-  };
-  // Legacy unified traits carried the ordnance weapon-trait keys on every
-  // actor; ship/npcShip trait schemas no longer include them.
-  const ORDNANCE_TRAIT_KEYS = ["rend", "armourPenetration", "shieldBurn", "shieldBypass"];
+  const knownKeysByType = Object.fromEntries(
+    [SHIP_TYPE, NPC_SHIP_TYPE, ORDNANCE_TYPE].map(type => [
+      type,
+      Object.keys(CONFIG.Actor.dataModels[type].schema.fields),
+    ]),
+  );
 
   console.log(`${MODULE_ID} | migrating ${legacy.length} legacy starship actor(s) to split actor types`);
   let migrated = 0;
   for (const actor of legacy) {
     try {
-      const src     = actor._source?.system ?? {};
-      const mode    = src.shipMode ?? "player";
-      const newType = MODE_TO_TYPE[mode] ?? SHIP_TYPE;
-
-      const system = foundry.utils.deepClone(src);
-      delete system.shipMode;
-
-      // Drop top-level keys the new type's schema doesn't declare.
-      const NewModel  = CONFIG.Actor.dataModels[newType];
-      const knownKeys = new Set(Object.keys(NewModel.schema.fields));
-      for (const key of Object.keys(system)) {
-        if (!knownKeys.has(key)) delete system[key];
-      }
-      if (newType !== ORDNANCE_TYPE && system.traits) {
-        for (const key of ORDNANCE_TRAIT_KEYS) delete system.traits[key];
-      }
-      if (newType === NPC_SHIP_TYPE) {
-        // The legacy unified schema stored resources as a free-form ObjectField
-        // (player-crew role allocations); the NPC schema declares a structured
-        // pilot/gunner SchemaField.  Drop the blob and take schema defaults —
-        // NPC resources are transient per-round combat state.
-        delete system.resources;
-      }
-      if (newType === ORDNANCE_TYPE) {
-        // Unified actors carried ship-sized hull defaults (50/50); ordnance
-        // hull is the warhead/flight count — reset to the schema default.
-        system.hull = { value: 1, max: 1 };
-      }
+      const src = actor._source?.system ?? {};
+      const { newType, system } = buildLegacyStarshipMigration(src, knownKeysByType);
 
       // V14 requires the system field to be a ForcedReplacement whenever the
       // type changes — this also replaces the stored system wholesale instead
