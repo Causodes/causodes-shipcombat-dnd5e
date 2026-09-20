@@ -16,6 +16,15 @@
 
 const MODULE_ID = "causodes-shipcombat-dnd5e";
 
+/**
+ * Upstream dnd5e sheet partials consumed by every ship-combat sheet.
+ * Keep these paths centralized because dnd5e may relocate shared AppV2 parts
+ * between major releases.
+ */
+export const DND5E_SHEET_TEMPLATES = Object.freeze({
+  warnings: "systems/dnd5e/templates/shared/sheet-warnings-dialog.hbs",
+});
+
 // FormulaField is a dnd5e-specific field type, not part of core foundry.data.fields.
 // Resolved lazily (inside defineSchema, not at module import time) since dnd5e's
 // globalThis.dnd5e may not be populated yet when this module is first evaluated.

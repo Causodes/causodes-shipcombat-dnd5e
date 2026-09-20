@@ -1,3 +1,7 @@
+## v1.2.2
+- Await Full Combat Reset requests so socket failures remain visible to the initiating sheet action
+- Use D&D5e's shared warnings-dialog partial for player, NPC, and ordnance sheets, restoring compatibility with D&D5e 6
+
 ## v1.2.1
 - Require Core 2.5.1 for corrected player and NPC ordnance lifecycle behavior
 - Publish an allowlisted runtime-only module archive without repository development files

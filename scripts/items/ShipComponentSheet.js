@@ -6,18 +6,10 @@
  * since ship components don't use the dnd5e advancement system.
  */
 
-// ── Weapon trait definitions (mirrors ShipComponentSheetMixin in core) ───────
-const _WEAPON_TRAITS = [
-  { key: "shieldBypass",      hasValue: false },
-  { key: "unlimitedRof",      hasValue: false },
-  { key: "shieldBurn",        hasValue: true,  enabledKey: "shieldBurnEnabled" },
-  { key: "rend",              hasValue: true,  enabledKey: "rendEnabled" },
-  { key: "armourPenetration", hasValue: true,  enabledKey: "armourPenetrationEnabled" },
-  { key: "devastating",       hasValue: true,  enabledKey: "devastatingEnabled" },
-  { key: "unreliable",        hasValue: false },
-  { key: "overcharge",        hasValue: false },
-  { key: "hitRatingModifier", hasValue: true, allowNegative: true, enabledKey: "hitRatingModifierEnabled" },
-];
+const {
+  WEAPON_TRAITS: _WEAPON_TRAITS,
+  buildComponentTraitUpdates,
+} = globalThis.ShipCombat._api;
 
 function _weaponTraitsDisplayHtml(traits) {
   const parts = [];
@@ -290,22 +282,9 @@ export function buildShipComponentSheet(ItemSheet5e) {
      * @this {ShipComponentSheet}
      */
     static async _onEditWeaponTraits() {
-      const traitPath = "system.traits";
-
       const result = await WeaponTraitsApp.prompt(this.item, this.element);
       if (!result) return;
-
-      const updates = {};
-      for (const def of _WEAPON_TRAITS) {
-        if (def.hasValue) {
-          updates[`${traitPath}.${def.key}`] = Number(result[`${def.key}-value`] ?? 0);
-          if (def.enabledKey) {
-            updates[`${traitPath}.${def.enabledKey}`] = result[def.enabledKey] === true || result[def.enabledKey] === "on";
-          }
-        } else {
-          updates[`${traitPath}.${def.key}`] = result[def.key] === true || result[def.key] === "on";
-        }
-      }
+      const updates = buildComponentTraitUpdates("weapon", result);
       // Save without triggering a full sheet re-render (which resets the active
       // tab to the first tab).  Directly patch the traits-summary nodes in the
       // live DOM so the display refreshes without replacing the part element

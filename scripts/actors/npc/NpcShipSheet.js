@@ -25,6 +25,8 @@
  *      documents, while core's mixin expects (dragData, event).
  */
 
+import { DND5E_SHEET_TEMPLATES } from "../dnd5e-compat.js";
+
 const CORE_MODULE_ID = "causodes-shipcombat-core";
 const MODULE_ID      = "causodes-shipcombat-dnd5e";
 
@@ -219,7 +221,7 @@ export function buildNpcShipSheet(NPCActorSheet, HitPointsConfigApp, ArmorClassC
       },
       // ── Native NPC structural tail ─────────────────────────────────────
       warnings: {
-        template: "systems/dnd5e/templates/actors/parts/actor-warnings-dialog.hbs",
+        template: DND5E_SHEET_TEMPLATES.warnings,
       },
       tabs: {
         id:       "tabs",

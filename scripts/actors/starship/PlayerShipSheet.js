@@ -13,6 +13,8 @@
  *   - Navigation: sidebar-tabs.hbs → right-side icon tabs (matches NPC sheet)
  */
 
+import { DND5E_SHEET_TEMPLATES } from "../dnd5e-compat.js";
+
 const { ShipSheetV2Mixin, SHIP_PARTS, SHIP_TABS, createActionRequester } = globalThis.ShipCombat._api;
 const requestGM = createActionRequester(context => context.actor);
 
@@ -87,7 +89,7 @@ export function buildPlayerShipSheet(NPCActorSheet, ClassificationConfigApp, Mov
               window:  { title: game.i18n.localize("SHIPCOMBAT.Dialog.FullReset") },
               content: `<p>${game.i18n.localize("SHIPCOMBAT.Dialog.FullResetBody")}</p>`,
             });
-            if (ok) requestGM(this, "fullReset");
+            if (ok) await requestGM(this, "fullReset");
           },
         },
       },
@@ -116,7 +118,7 @@ export function buildPlayerShipSheet(NPCActorSheet, ClassificationConfigApp, Mov
       ...CONTENT_PARTS,
       // Right-side icon tab navigation (matches native NPC sheet)
       warnings: {
-        template: "systems/dnd5e/templates/actors/parts/actor-warnings-dialog.hbs",
+        template: DND5E_SHEET_TEMPLATES.warnings,
       },
       tabs: {
         id:       "tabs",
