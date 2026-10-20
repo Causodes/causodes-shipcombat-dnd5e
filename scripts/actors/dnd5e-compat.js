@@ -16,13 +16,27 @@
 
 const MODULE_ID = "causodes-shipcombat-dnd5e";
 
+/** Extend a SchemaField on Foundry v13 and v14, preserving its options. */
+export function extendSchemaFields(schema, fields) {
+  if (typeof schema.extendFields === "function") {
+    schema.extendFields(fields);
+    return schema;
+  }
+  // v13 has no public extension method. Initialize only the new fields so
+  // they bind to this schema, preserving the existing fields and options.
+  Object.assign(schema.fields, schema._initialize(fields));
+  return schema;
+}
+
 /**
  * Upstream dnd5e sheet partials consumed by every ship-combat sheet.
- * Keep these paths centralized because dnd5e may relocate shared AppV2 parts
- * between major releases.
+ * Resolve lazily from the native sheet because dnd5e relocates shared AppV2
+ * parts between major releases and its API is populated during init.
  */
 export const DND5E_SHEET_TEMPLATES = Object.freeze({
-  warnings: "systems/dnd5e/templates/shared/sheet-warnings-dialog.hbs",
+  get warnings() {
+    return globalThis.dnd5e.applications.actor.NPCActorSheet.PARTS.warnings.template;
+  },
 });
 
 // FormulaField is a dnd5e-specific field type, not part of core foundry.data.fields.

@@ -1,3 +1,8 @@
+## v1.2.3
+- Fix NPC ship and ordnance schema initialization on Foundry v13, where SchemaField.extendFields is unavailable
+- Use the native D&D5e sheet's warnings template to support both D&D5e 5 and 6
+- Filter crew station navigation through D&D5e 5's older tab preparation hook
+
 ## v1.2.2
 - Await Full Combat Reset requests so socket failures remain visible to the initiating sheet action
 - Use D&D5e's shared warnings-dialog partial for player, NPC, and ordnance sheets, restoring compatibility with D&D5e 6

@@ -16,6 +16,7 @@
 import {
   dnd5eShipStubSchema,
   dnd5eAttributeStubFields,
+  extendSchemaFields,
   mirrorHullToHp,
   prepareFlatAC,
   prepareTravelSpeeds,
@@ -49,10 +50,8 @@ export class NpcShipModel extends NpcShipSchemaMixin(_Base) {
     const schema = super.defineSchema();
     // NpcShipSchemaMixin overwrote _Base's attributes with piloting/tech/gunnery;
     // extend its SchemaField with the dnd5e stubs (hp, ac, init, spell,
-    // concentration, travel, price, capacity) so both coexist.  extendFields
-    // is required here — the mixin's sub-fields are already bound to their
-    // SchemaField and may not be spread into a new one.
-    schema.attributes.extendFields(dnd5eAttributeStubFields());
+    // concentration, travel, price, capacity) so both coexist on v13 and v14.
+    schema.attributes = extendSchemaFields(schema.attributes, dnd5eAttributeStubFields());
     return schema;
   }
 }

@@ -17,6 +17,7 @@
 import {
   dnd5eShipStubSchema,
   dnd5eTraitStubFields,
+  extendSchemaFields,
   mirrorHullToHp,
   prepareTravelSpeeds,
 } from "../dnd5e-compat.js";
@@ -55,10 +56,8 @@ export class ShipOrdnanceModel extends OrdnanceSchemaMixin(_Base) {
     const schema = super.defineSchema();
     // OrdnanceSchemaMixin overwrote _Base's traits with the weapon-trait block;
     // extend its SchemaField with the dnd5e stubs (dr/di/dv/dm/ci pills,
-    // important, size, weight/keel/beam) so both coexist.  extendFields is
-    // required here — the mixin's sub-fields are already bound to their
-    // SchemaField and may not be spread into a new one.
-    schema.traits.extendFields(dnd5eTraitStubFields());
+    // important, size, weight/keel/beam) so both coexist on v13 and v14.
+    schema.traits = extendSchemaFields(schema.traits, dnd5eTraitStubFields());
     return schema;
   }
 }

@@ -152,9 +152,7 @@ export function buildPlayerShipSheet(NPCActorSheet, ClassificationConfigApp, Mov
 
     /**
      * Filter the icon-tab strip to only the roles active for this ship's crew
-     * size.  Actor sheets populate the sidebar-tabs strip from context.tabs set
-     * by PrimarySheetMixin._getTabs(), NOT from _prepareTabsContext (which is
-     * only used by CompendiumBrowser).
+     * size. D&D5e 6 populates the sidebar-tabs strip through _getTabs().
      * @override
      */
     _getTabs() {
@@ -164,6 +162,18 @@ export function buildPlayerShipSheet(NPCActorSheet, ClassificationConfigApp, Mov
         if (!allowed[key]) delete all[key];
       }
       return all;
+    }
+
+    /** D&D5e 5 builds its actor-tab array through this older hook instead. */
+    async _prepareTabsContext(context, options) {
+      context = await super._prepareTabsContext?.(context, options) ?? context;
+      if (Array.isArray(context.tabs)) {
+        const allowed = this.controller.buildTabs();
+        context.tabs = context.tabs.filter(tab => allowed[tab.tab]);
+        const active = context.tabs.find(tab => tab.tab === this.tabGroups.primary) ?? context.tabs[0];
+        for (const tab of context.tabs) tab.active = tab === active;
+      }
+      return context;
     }
 
     /* ── Instance configuration ───────────────────────────────────────── */
